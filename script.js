@@ -9,31 +9,36 @@ function login() {
     }
 }
 
-function enviar() {
+function evaluar() {
     let nombre = document.getElementById("nombre").value;
-    let edad = document.getElementById("edad").value;
-    let estado = document.getElementById("estado").value;
+    let consumo = document.getElementById("consumo").value;
+    let zona = document.getElementById("zona").value;
 
-    if (nombre === "" || edad === "" || estado === "") {
+    if (nombre === "" || consumo === "" || zona === "") {
         alert("Completa todos los campos");
-    } else {
-        localStorage.setItem("estado", estado);
-        window.location.href = "resultados.html";
+        return;
     }
+
+    let resultado = "";
+
+    if (zona === "alta" && consumo > 200) {
+        resultado = "Excelente opción: La energía solar es altamente recomendable para ti ☀️";
+    } 
+    else if (zona === "media") {
+        resultado = "Buena opción: Podrías beneficiarte parcialmente 🌤️";
+    } 
+    else {
+        resultado = "Poco recomendable: La inversión podría no ser óptima 🌥️";
+    }
+
+    localStorage.setItem("resultado", resultado);
+    window.location.href = "resultados.html";
 }
 
 window.onload = function() {
-    let resultado = document.getElementById("resultado");
+    let texto = document.getElementById("resultado");
 
-    if (resultado) {
-        let estado = localStorage.getItem("estado");
-
-        if (estado === "bien") {
-            resultado.innerHTML = "Resultado: Estado positivo 😊";
-        } else if (estado === "regular") {
-            resultado.innerHTML = "Resultado: Estado neutral 😐";
-        } else {
-            resultado.innerHTML = "Resultado: Estado negativo 😔";
-        }
+    if (texto) {
+        texto.innerHTML = localStorage.getItem("resultado");
     }
 };

@@ -1,459 +1,454 @@
-/* ================================================
-   SOLAR ADVISOR — styles.css
-   Layout: Sidebar fijo + contenido principal
-   Paleta: Ámbar · Naranja · Azul profundo
-================================================ */
+/**
+ * SOLAR ADVISOR — script.js
+ * RF-01→RF-15 | HU-01→HU-06
+ * Incluye: Auth · Evaluación · Cálculos · Dashboard · Historial
+ */
 
-:root {
-  --yellow:   #F5C518;
-  --amber:    #F59E0B;
-  --orange:   #F97316;
-  --orange-d: #EA580C;
-  --sky:      #0EA5E9;
-  --navy:     #0C1A2E;
-  --navy-2:   #112240;
-  --navy-3:   #1A3358;
-  --sidebar-w: 230px;
-  --white:    #FFFFFF;
-  --muted:    rgba(255,255,255,0.50);
-  --border:   rgba(255,255,255,0.09);
-  --card-bg:  rgba(255,255,255,0.06);
-  --shadow:   0 4px 24px rgba(0,0,0,0.3);
-  --radius:   14px;
-  --radius-sm:9px;
-  --grad-gold: linear-gradient(135deg,#F5C518 0%,#F97316 100%);
-  --grad-sky:  linear-gradient(135deg,#0EA5E9 0%,#3B82F6 100%);
+// ============================================================
+// STORAGE HELPERS
+// ============================================================
+const getUsers       = () => JSON.parse(localStorage.getItem('sa_users')       || '[]');
+const saveUsers      = u  => localStorage.setItem('sa_users', JSON.stringify(u));
+const getCurrentUser = () => JSON.parse(localStorage.getItem('sa_current_user')|| 'null');
+const setCurrentUser = u  => localStorage.setItem('sa_current_user', JSON.stringify(u));
+const clearCurrentUser = () => localStorage.removeItem('sa_current_user');
+
+// Historial: array de evaluaciones del usuario actual
+function getHistory() {
+  const u = getCurrentUser();
+  if (!u) return [];
+  return JSON.parse(localStorage.getItem(`sa_history_${u.email}`) || '[]');
 }
-
-*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
-html { scroll-behavior:smooth; }
-
-body {
-  font-family:'DM Sans', sans-serif;
-  background: var(--navy);
-  color: var(--white);
-  min-height: 100vh;
+function saveHistory(arr) {
+  const u = getCurrentUser();
+  if (!u) return;
+  localStorage.setItem(`sa_history_${u.email}`, JSON.stringify(arr));
 }
+function getEvalData()    { return JSON.parse(localStorage.getItem('sa_eval_data') || 'null'); }
+function saveEvalData(d)  { localStorage.setItem('sa_eval_data', JSON.stringify(d)); }
 
-/* ── BG DECORATIONS ── */
-.bg-mesh {
-  position:fixed; inset:0; z-index:0; pointer-events:none;
-  background:
-    radial-gradient(ellipse 70% 50% at 10% 5%,  rgba(245,197,24,.10) 0%,transparent 60%),
-    radial-gradient(ellipse 50% 40% at 85% 85%, rgba(14,165,233,.09) 0%,transparent 60%),
-    radial-gradient(ellipse 35% 35% at 55% 45%, rgba(249,115,22,.06) 0%,transparent 60%);
-}
-.orb {
-  position:fixed; border-radius:50%; pointer-events:none; z-index:0;
-  filter:blur(90px); opacity:.15; animation:float 9s ease-in-out infinite;
-}
-.orb-1{width:450px;height:450px;top:-130px;right:-80px; background:var(--amber);animation-delay:0s;}
-.orb-2{width:320px;height:320px;bottom:-90px;left:-60px; background:var(--sky); animation-delay:-4s;}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-25px)}}
+// ============================================================
+// UTILS
+// ============================================================
+const formatCOP = v => '$ ' + Math.round(v).toLocaleString('es-CO') + ' COP';
+const formatKwh = v => v.toFixed(1) + ' kWh';
+const setInner  = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val; };
+const clearErr  = id => { const e = document.getElementById(id); if (e) e.textContent = ''; };
+const showErr   = (id, msg) => { const e = document.getElementById(id); if (e) e.textContent = msg; };
+const initials  = name => name ? name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2) : '?';
 
-/* ================================================
-   AUTH PAGE  (index.html)
-================================================ */
-.auth-page {
-  display:flex; align-items:center; justify-content:center; min-height:100vh;
-}
-.auth-container {
-  position:relative; z-index:10;
-  width:100%; max-width:440px; padding:20px;
-  display:flex; flex-direction:column; align-items:center; gap:14px;
-}
-.auth-card {
-  width:100%;
-  background:rgba(17,34,64,.88);
-  border:1px solid var(--border);
-  border-radius:22px;
-  padding:38px 34px;
-  backdrop-filter:blur(22px);
-  box-shadow:0 20px 60px rgba(0,0,0,.45);
-  animation:card-in .45s ease both;
-}
-@keyframes card-in{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
-
-/* brand */
-.brand{text-align:center;margin-bottom:26px;}
-.brand-icon{font-size:34px;display:block;margin-bottom:8px;filter:drop-shadow(0 0 12px var(--amber));}
-.brand-title{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;letter-spacing:-1px;line-height:1;}
-.brand-title em{font-style:normal;background:var(--grad-gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.brand-sub{margin-top:6px;font-size:12px;color:var(--muted);}
-
-/* tabs */
-.tab-switcher{position:relative;display:flex;background:rgba(255,255,255,.06);border-radius:11px;padding:4px;margin-bottom:26px;gap:2px;}
-.tab-btn{flex:1;padding:9px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;border-radius:9px;cursor:pointer;transition:color .2s;position:relative;z-index:2;}
-.tab-btn.active{color:var(--navy);}
-.tab-indicator{position:absolute;top:4px;left:4px;height:calc(100% - 8px);width:calc(50% - 4px);background:var(--grad-gold);border-radius:8px;transition:transform .25s cubic-bezier(.4,0,.2,1);z-index:1;}
-.tab-indicator.right{transform:translateX(calc(100% + 2px));}
-
-.auth-footer{font-size:11px;color:rgba(255,255,255,.25);text-align:center;}
-
-/* ================================================
-   APP SHELL  (formulario / dashboard / resultados)
-================================================ */
-.app-shell {
-  display:flex; min-height:100vh; position:relative; z-index:5;
+// ============================================================
+// SIDEBAR USER INFO
+// ============================================================
+function loadSidebarUser() {
+  const u = getCurrentUser();
+  if (!u) return;
+  setInner('sbUserName',  u.name  || u.email);
+  setInner('sbUserEmail', u.email || '');
+  const av = document.getElementById('sbAvatar');
+  if (av) av.textContent = initials(u.name || u.email);
 }
 
-/* ── SIDEBAR ── */
-.sidebar {
-  width:var(--sidebar-w); min-width:var(--sidebar-w);
-  background:rgba(12,20,40,.92);
-  border-right:1px solid var(--border);
-  backdrop-filter:blur(18px);
-  display:flex; flex-direction:column;
-  position:fixed; top:0; left:0; height:100vh;
-  z-index:100;
-}
-.sidebar-brand {
-  padding:22px 18px 18px;
-  border-bottom:1px solid var(--border);
-}
-.sb-logo {
-  display:flex; align-items:center; gap:9px; margin-bottom:4px;
-}
-.sb-logo-icon {
-  width:32px;height:32px;border-radius:9px;
-  background:var(--grad-gold);
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;flex-shrink:0;
-  box-shadow:0 0 16px rgba(245,197,24,.3);
-}
-.sb-logo-text {
-  font-family:'Syne',sans-serif;font-size:17px;font-weight:800;
-}
-.sb-logo-text em{font-style:normal;background:var(--grad-gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.sb-tagline{font-size:11px;color:var(--muted);margin-left:2px;}
-
-.sidebar-nav {
-  flex:1; padding:14px 10px; display:flex; flex-direction:column; gap:2px; overflow-y:auto;
-}
-.nav-section-label {
-  font-size:10px; color:rgba(255,255,255,.25); text-transform:uppercase;
-  letter-spacing:.8px; padding:10px 10px 4px; margin-top:6px;
-}
-.nav-item {
-  display:flex; align-items:center; gap:11px;
-  padding:10px 12px; border-radius:var(--radius-sm);
-  font-size:13px; font-weight:500; color:var(--muted);
-  cursor:pointer; text-decoration:none;
-  transition:background .18s, color .18s;
-  border:none; background:transparent; width:100%; text-align:left;
-}
-.nav-item:hover { background:rgba(255,255,255,.06); color:var(--white); }
-.nav-item.active {
-  background:rgba(245,197,24,.13);
-  color:var(--yellow);
-  border:1px solid rgba(245,197,24,.18);
-}
-.nav-icon { font-size:15px; flex-shrink:0; }
-.nav-badge {
-  margin-left:auto; font-size:10px; font-weight:700;
-  background:var(--grad-gold); color:var(--navy);
-  padding:2px 7px; border-radius:10px;
+// ============================================================
+// AUTH — index.html
+// ============================================================
+function switchTab(tab) {
+  const lf = document.getElementById('loginForm');
+  const rf = document.getElementById('registerForm');
+  const tl = document.getElementById('tabLogin');
+  const tr = document.getElementById('tabRegister');
+  const ind= document.getElementById('tabIndicator');
+  if (tab === 'login') {
+    lf.classList.remove('hidden'); rf.classList.add('hidden');
+    tl.classList.add('active');    tr.classList.remove('active');
+    ind.classList.remove('right');
+  } else {
+    lf.classList.add('hidden');    rf.classList.remove('hidden');
+    tl.classList.remove('active'); tr.classList.add('active');
+    ind.classList.add('right');
+  }
+  ['errLoginEmail','errLoginPass','errLoginGlobal',
+   'errRegName','errRegEmail','errRegPhone','errRegPass','errRegGlobal'].forEach(clearErr);
 }
 
-.sidebar-user {
-  padding:14px 14px; border-top:1px solid var(--border);
-  display:flex; align-items:center; gap:10px;
+/** HU-01 / RF-01 */
+function handleRegister() {
+  ['errRegName','errRegEmail','errRegPhone','errRegPass','errRegGlobal'].forEach(clearErr);
+  const name  = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const phone = document.getElementById('regPhone').value.trim();
+  const pass  = document.getElementById('regPass').value;
+  let ok = true;
+  if (!name)  { showErr('errRegName','El nombre es obligatorio.'); ok=false; }
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email)       { showErr('errRegEmail','El correo es obligatorio.'); ok=false; }
+  else if (!re.test(email)) { showErr('errRegEmail','Formato inválido (ej: usuario@correo.com).'); ok=false; }
+  if (!phone) { showErr('errRegPhone','El teléfono es obligatorio.'); ok=false; }
+  if (!pass)  { showErr('errRegPass','La contraseña es obligatoria.'); ok=false; }
+  else if (pass.length < 6) { showErr('errRegPass','Mínimo 6 caracteres.'); ok=false; }
+  if (!ok) return;
+  const users = getUsers();
+  if (users.find(u => u.email === email)) {
+    showErr('errRegGlobal','⚠ Este correo ya está registrado.'); return;
+  }
+  users.push({ name, email, phone, pass });
+  saveUsers(users);
+  alert(`✅ Cuenta creada. ¡Bienvenido, ${name}!`);
+  switchTab('login');
+  document.getElementById('loginEmail').value = email;
 }
-.user-avatar {
-  width:34px;height:34px;border-radius:50%;
-  background:rgba(245,197,24,.2);border:1px solid rgba(245,197,24,.3);
-  display:flex;align-items:center;justify-content:center;
-  font-size:12px;font-weight:700;color:var(--yellow);flex-shrink:0;
+
+/** HU-02 / RF-02 */
+function handleLogin() {
+  ['errLoginEmail','errLoginPass','errLoginGlobal'].forEach(clearErr);
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass  = document.getElementById('loginPass').value;
+  if (!email) { showErr('errLoginEmail','El correo es obligatorio.'); return; }
+  if (!pass)  { showErr('errLoginPass', 'La contraseña es obligatoria.'); return; }
+  const user = getUsers().find(u => u.email === email && u.pass === pass);
+  if (!user)  { showErr('errLoginGlobal','⚠ Credenciales incorrectas.'); return; }
+  setCurrentUser(user);
+  window.location.href = 'dashboard.html';
 }
-.user-info-name  { font-size:12px; font-weight:600; }
-.user-info-email { font-size:10px; color:var(--muted); }
-.btn-logout-sm {
-  margin-left:auto; background:transparent; border:none;
-  color:rgba(255,255,255,.3); cursor:pointer; font-size:14px;
-  transition:color .2s; padding:4px;
+
+function togglePass(id, btn) {
+  const input = document.getElementById(id);
+  if (!input) return;
+  input.type = input.type === 'password' ? 'text' : 'password';
+  btn.textContent = input.type === 'password' ? '👁' : '🙈';
 }
-.btn-logout-sm:hover { color:#FF6B6B; }
 
-/* ── MAIN AREA ── */
-.main-area {
-  margin-left:var(--sidebar-w);
-  flex:1; display:flex; flex-direction:column; min-height:100vh;
+function logout() {
+  clearCurrentUser();
+  window.location.href = 'index.html';
 }
-.topbar {
-  position:sticky; top:0; z-index:50;
-  background:rgba(12,26,46,.85); backdrop-filter:blur(16px);
-  border-bottom:1px solid var(--border);
-  padding:14px 28px;
-  display:flex; align-items:center; justify-content:space-between;
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+function renderDashboard() {
+  const user = getCurrentUser();
+  if (!user) return;
+  setInner('dashWelcome', `Bienvenido, ${user.name ? user.name.split(' ')[0] : 'Usuario'} 👋`);
+
+  const hist = getHistory();
+  const evalCount = document.getElementById('evalCountLabel');
+
+  // Métricas rápidas
+  setInner('mTotalEvals', hist.length);
+  setInner('sbEvalCount', hist.length);
+  const altas = hist.filter(h => h.nivel === 'alta').length;
+  setInner('mAltaCount', altas);
+
+  if (hist.length > 0) {
+    const avgAhorro = hist.reduce((s,h) => s + (h.ahorroMensual||0), 0) / hist.length;
+    const avgCob    = hist.reduce((s,h) => s + (h.cobertura||0), 0)    / hist.length;
+    setInner('mAvgAhorro', '$ ' + Math.round(avgAhorro/1000) + 'k');
+    setInner('mAvgCob',    avgCob.toFixed(0) + '%');
+  } else {
+    setInner('mAvgAhorro','—');
+    setInner('mAvgCob','—');
+  }
+
+  // Lista evaluaciones
+  if (evalCount) evalCount.textContent = `${hist.length} registro${hist.length!==1?'s':''}`;
+  const list = document.getElementById('evalList');
+  if (list) {
+    if (hist.length === 0) {
+      list.innerHTML = `<div style="text-align:center;padding:32px;color:var(--muted);font-size:13px;">
+        <div style="font-size:32px;margin-bottom:10px;">📋</div>
+        Aún no tienes evaluaciones.<br/>
+        <a href="formulario.html" style="color:var(--amber);text-decoration:none;">Crear primera evaluación →</a>
+      </div>`;
+    } else {
+      list.innerHTML = hist.slice().reverse().map(h => `
+        <div class="eval-row" onclick="verEvalHistorial('${h.evalId}')">
+          <div class="eval-dot ${h.nivel}"></div>
+          <div class="eval-info">
+            <div class="eval-name">${h.ubicacion || 'Sin ubicación'} · ${h.tipo || ''}</div>
+            <div class="eval-meta">${h.evalId} · ${h.nombre || ''}</div>
+          </div>
+          <span class="eval-chip chip-${h.nivel}">${
+            h.nivel==='alta' ? 'Altamente rec.' :
+            h.nivel==='media'? 'Moderadamente' : 'No recomendable'
+          }</span>
+        </div>`).join('');
+    }
+  }
+
+  // Mini chart: últimas 5 evaluaciones
+  const chartEl = document.getElementById('dashMiniChart');
+  if (chartEl && hist.length > 0) {
+    const recientes = hist.slice(-5);
+    const maxVal = Math.max(...recientes.map(h => Math.max(h.consumo, h.produccionMes)));
+    chartEl.innerHTML = recientes.map(h => {
+      const hC = Math.max((h.consumo       / maxVal) * 80, 3);
+      const hP = Math.max((h.produccionMes / maxVal) * 80, 3);
+      const lbl = (h.ubicacion||'').split(',')[0].slice(0,8);
+      return `<div class="mini-bar-g">
+        <div class="mini-bars">
+          <div class="mini-bar c" style="height:${hC}px" title="Consumo: ${h.consumo.toFixed(0)} kWh"></div>
+          <div class="mini-bar p" style="height:${hP}px" title="Prod.: ${h.produccionMes.toFixed(0)} kWh"></div>
+        </div>
+        <div class="mini-lbl">${lbl}</div>
+      </div>`;
+    }).join('');
+  }
 }
-.topbar-title { font-family:'Syne',sans-serif; font-size:16px; font-weight:700; }
-.topbar-right  { display:flex; align-items:center; gap:12px; }
-.eval-id-badge {
-  font-size:11px; background:rgba(255,255,255,.06);
-  border:1px solid var(--border); color:var(--muted);
-  padding:4px 10px; border-radius:20px;
+
+function verEvalHistorial(evalId) {
+  const hist = getHistory();
+  const ev   = hist.find(h => h.evalId === evalId);
+  if (!ev) return;
+  saveEvalData(ev);
+  window.location.href = 'resultados.html';
 }
-.page-content { padding:28px; flex:1; }
 
-/* ================================================
-   SHARED COMPONENTS
-================================================ */
-
-/* fields */
-.hidden { display:none !important; }
-.field { display:flex;flex-direction:column;gap:6px;margin-bottom:16px; }
-.field label { font-size:12px;font-weight:500;color:rgba(255,255,255,.7);letter-spacing:.3px; }
-.input-wrap {
-  position:relative;display:flex;align-items:center;
-  background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.11);
-  border-radius:var(--radius-sm); transition:border-color .2s, background .2s;
+function mostrarHistorial() {
+  window.location.href = 'dashboard.html';
 }
-.input-wrap:focus-within { border-color:var(--amber); background:rgba(245,159,11,.08); box-shadow:0 0 0 3px rgba(245,159,11,.10); }
-.i-icon { position:absolute;left:13px;font-size:14px;pointer-events:none;filter:grayscale(20%); }
-input, select, textarea {
-  width:100%; background:transparent; border:none; outline:none;
-  color:var(--white); font-family:'DM Sans',sans-serif; font-size:13px;
-  padding:12px 13px 12px 40px;
+
+// ============================================================
+// FORMULARIO
+// ============================================================
+function calcularArea() {
+  const l = parseFloat(document.getElementById('largo')?.value) || 0;
+  const a = parseFloat(document.getElementById('ancho')?.value) || 0;
+  const r = document.getElementById('areaResult');
+  if (r) r.textContent = (l>0 && a>0) ? (l*a).toFixed(2)+' m²' : '— m²';
 }
-input::placeholder { color:rgba(255,255,255,.28); }
-select { appearance:none; cursor:pointer; }
-select option { background:var(--navy-2); color:var(--white); }
-.select-wrap::after { content:'▾';position:absolute;right:13px;color:var(--muted);pointer-events:none;font-size:11px; }
-.toggle-pass { position:absolute;right:11px;background:transparent;border:none;cursor:pointer;font-size:15px;opacity:.45;transition:opacity .2s;padding:4px; }
-.toggle-pass:hover { opacity:1; }
-.field-error { font-size:11px;color:#FF6B6B;min-height:15px;display:block;animation:shake .3s ease; }
-.global-error { text-align:center;margin-bottom:4px; }
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
-.hint { font-size:11px;color:rgba(255,255,255,.3);margin-top:-4px; }
 
-/* buttons */
-.btn-primary {
-  width:100%; padding:13px 22px;
-  background:var(--grad-gold); border:none; border-radius:var(--radius-sm);
-  color:var(--navy); font-family:'Syne',sans-serif; font-size:14px; font-weight:700;
-  cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;
-  transition:opacity .2s, transform .15s, box-shadow .2s;
+function toggleAreaMode(mode) {
+  document.getElementById('modeDimensiones')?.classList.toggle('hidden', mode !== 'dimensiones');
+  document.getElementById('modeTotal')?.classList.toggle('hidden', mode !== 'total');
 }
-.btn-primary:hover { opacity:.9;transform:translateY(-1px);box-shadow:0 8px 22px rgba(245,159,11,.3); }
-.btn-primary:active { transform:translateY(0); }
-.btn-primary.btn-md { padding:12px 24px; font-size:13px; width:auto; }
-.btn-secondary {
-  padding:11px 22px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.11);
-  border-radius:var(--radius-sm); color:var(--white); font-family:'DM Sans',sans-serif;
-  font-size:13px; font-weight:500; cursor:pointer; transition:background .2s, transform .15s;
+
+function limpiarFormulario() {
+  ['nombreUsuario','tipoLugar','ubicacion','largo','ancho','areaTotalDirecta',
+   'consumoKwh','tarifaKwh'].forEach(id => { const e=document.getElementById(id); if(e) e.value=''; });
+  document.querySelectorAll('input[name="exposicion"]').forEach(r => r.checked=false);
+  document.querySelectorAll('input[name="areaMode"]').forEach((r,i) => r.checked=i===0);
+  toggleAreaMode('dimensiones'); calcularArea();
+  const def = {potenciaPanel:400,areaPanel:2,precioPanel:800000,costosAdicionales:500000};
+  Object.entries(def).forEach(([id,v]) => { const e=document.getElementById(id); if(e) e.value=v; });
+  ['errNombre','errTipo','errUbicacion','errArea','errConsumo','errTarifa','errExposicion'].forEach(clearErr);
 }
-.btn-secondary:hover { background:rgba(255,255,255,.12);transform:translateY(-1px); }
-.btn-arrow { font-size:16px; }
 
-/* section headers */
-.section-title {
-  font-family:'Syne',sans-serif; font-size:24px; font-weight:800;
-  background:var(--grad-gold); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  margin-bottom:4px;
+/** Procesar evaluación completa RF-03 → RF-13 */
+function procesarEvaluacion() {
+  ['errNombre','errTipo','errUbicacion','errArea','errConsumo','errTarifa','errExposicion'].forEach(clearErr);
+
+  const nombre    = document.getElementById('nombreUsuario').value.trim();
+  const tipo      = document.getElementById('tipoLugar').value;
+  const ubicacion = document.getElementById('ubicacion').value.trim();
+  const consumo   = parseFloat(document.getElementById('consumoKwh').value);
+  const tarifa    = parseFloat(document.getElementById('tarifaKwh').value);
+  const expRadio  = document.querySelector('input[name="exposicion"]:checked');
+  const areaMode  = document.querySelector('input[name="areaMode"]:checked')?.value || 'dimensiones';
+
+  let areaTecho = 0;
+  if (areaMode === 'dimensiones') {
+    const l = parseFloat(document.getElementById('largo').value);
+    const a = parseFloat(document.getElementById('ancho').value);
+    if (l>0 && a>0) areaTecho = l*a;
+  } else {
+    areaTecho = parseFloat(document.getElementById('areaTotalDirecta').value)||0;
+  }
+
+  const potenciaPanel     = parseFloat(document.getElementById('potenciaPanel').value)||400;
+  const areaPanel         = parseFloat(document.getElementById('areaPanel').value)||2;
+  const precioPanel       = parseFloat(document.getElementById('precioPanel').value)||800000;
+  const costosAdicionales = parseFloat(document.getElementById('costosAdicionales').value)||500000;
+
+  let ok = true;
+  if (!nombre)      { showErr('errNombre','El nombre es obligatorio.'); ok=false; }
+  if (!tipo)        { showErr('errTipo','Selecciona el tipo de lugar.'); ok=false; }
+  if (!ubicacion)   { showErr('errUbicacion','La ubicación es obligatoria (RF-03).'); ok=false; }
+  if (!areaTecho || areaTecho<=0) { showErr('errArea','El área debe ser mayor a 0 m² (RF-04).'); ok=false; }
+  if (!consumo || consumo<=0)     { showErr('errConsumo','El consumo debe ser mayor a 0 kWh (RF-05).'); ok=false; }
+  if (!tarifa  || tarifa<=0)      { showErr('errTarifa','La tarifa debe ser mayor a 0.'); ok=false; }
+  if (!expRadio)  { showErr('errExposicion','Selecciona el nivel de exposición solar.'); ok=false; }
+  if (!ok) return;
+
+  const exposicion = expRadio.value;
+
+  // RF-06 Irradiancia
+  const hspMap     = { alta:5.5, media:4.0, baja:2.5 };
+  const horasSolPico = hspMap[exposicion];
+
+  // RF-07 Paneles
+  const numPaneles    = Math.floor((areaTecho * 0.7) / areaPanel);
+  // RF-08 Producción
+  const potTotal_kW   = (numPaneles * potenciaPanel) / 1000;
+  const produccionMes = potTotal_kW * horasSolPico * 30 * 0.85;
+  // RF-09 Cobertura
+  const cobertura     = (produccionMes / consumo) * 100;
+  const energiaCubierta = Math.min(produccionMes, consumo);
+  const balance       = produccionMes - consumo;
+  // RF-10 Inversión
+  const inversionTotal= (numPaneles * precioPanel) + costosAdicionales;
+  // RF-11 Ahorro
+  const ahorroMensual = energiaCubierta * tarifa;
+  // RF-12 Payback
+  const paybackMeses  = ahorroMensual > 0 ? inversionTotal / ahorroMensual : Infinity;
+  const paybackAnios  = paybackMeses / 12;
+
+  // RF-13 Recomendación
+  let recomendacion, nivel;
+  if (exposicion === 'alta' && consumo > 200) {
+    recomendacion='Altamente recomendable'; nivel='alta';
+  } else if (exposicion === 'media') {
+    recomendacion='Moderadamente recomendable'; nivel='media';
+  } else if (exposicion === 'baja') {
+    recomendacion='No recomendable'; nivel='baja';
+  } else if (cobertura >= 70 && paybackMeses <= 84) {
+    recomendacion='Altamente recomendable'; nivel='alta';
+  } else if (cobertura >= 40) {
+    recomendacion='Moderadamente recomendable'; nivel='media';
+  } else {
+    recomendacion='No recomendable actualmente'; nivel='baja';
+  }
+
+  const evalId = 'SA-' + Date.now().toString(36).toUpperCase();
+
+  const data = {
+    evalId, nombre, tipo, ubicacion, exposicion, areaTecho, areaPanel, potenciaPanel,
+    numPaneles, potenciaTotal_kW: potTotal_kW, horasSolPico, produccionMes,
+    consumo, tarifa, energiaCubierta, balance, cobertura,
+    inversionTotal, ahorroMensual, paybackMeses, paybackAnios,
+    recomendacion, nivel, precioPanel, costosAdicionales,
+    fecha: new Date().toLocaleDateString('es-CO')
+  };
+
+  // Guardar en historial del usuario
+  const hist = getHistory();
+  hist.push(data);
+  saveHistory(hist);
+
+  saveEvalData(data);
+  window.location.href = 'resultados.html';
 }
-.section-sub { color:var(--muted); font-size:13px; margin-bottom:24px; }
 
-/* cards */
-.card {
-  background:var(--card-bg); border:1px solid var(--border);
-  border-radius:var(--radius); padding:22px;
-  backdrop-filter:blur(10px); transition:border-color .2s, transform .2s;
-  animation:card-in .4s ease both;
+// ============================================================
+// RESULTADOS
+// ============================================================
+function renderResultados() {
+  const data = getEvalData();
+  if (!data) { window.location.href = 'formulario.html'; return; }
+
+  setInner('topEvalId', data.evalId);
+
+  // Verdict
+  const banner = document.getElementById('verdictBanner');
+  const iconMap = {alta:'☀', media:'⛅', baja:'🌥'};
+  const msgMap  = {
+    alta:  'Tu propiedad tiene excelentes condiciones. La inversión se recupera en buen tiempo y tendrás alta cobertura energética.',
+    media: 'Las condiciones son moderadas. El sistema solar puede funcionar; evalúa optimizar orientación del techo.',
+    baja:  'La exposición solar es insuficiente para que la inversión sea rentable con las condiciones actuales.'
+  };
+  if (banner) banner.classList.add(data.nivel);
+  setInner('verdictIcon', iconMap[data.nivel]);
+  setInner('verdictTitle', data.recomendacion);
+  setInner('verdictMsg',   msgMap[data.nivel]);
+  setInner('verdictBadge', data.exposicion.charAt(0).toUpperCase()+data.exposicion.slice(1)+' exposición');
+
+  // Métricas
+  setInner('mCobertura', data.cobertura.toFixed(1)+'%');
+  setInner('mBalance', data.balance>=0
+    ? `Excedente: ${formatKwh(data.balance)}`
+    : `Déficit: ${formatKwh(Math.abs(data.balance))}`);
+  const bar = document.getElementById('barCobertura');
+  if (bar) setTimeout(()=>{ bar.style.width=Math.min(data.cobertura,100)+'%'; },200);
+
+  setInner('mPaneles',    data.numPaneles+' paneles');
+  setInner('mProduccion', `Prod.: ${formatKwh(data.produccionMes)}/mes`);
+  setInner('mInversion',  formatCOP(data.inversionTotal));
+  setInner('mInvSub',     `${data.numPaneles} × ${formatCOP(data.precioPanel)}`);
+  setInner('mAhorro',     formatCOP(data.ahorroMensual)+'/mes');
+
+  if (!isFinite(data.paybackMeses) || data.paybackMeses > 999) {
+    setInner('mPayback','No calculable');
+    setInner('mPaybackSub','Ahorro insuficiente');
+  } else {
+    setInner('mPayback',    data.paybackAnios.toFixed(1)+' años');
+    setInner('mPaybackSub', Math.round(data.paybackMeses)+' meses');
+  }
+  setInner('mConsumoVsProd', `${formatKwh(data.produccionMes)} / ${formatKwh(data.consumo)}`);
+  setInner('mConsumoSub', 'Prod. vs Consumo mensual');
+
+  // Chart RF-15
+  const seasonal = [.90,.92,1.02,1.08,1.10,1.05,1.00,.98,1.04,1.06,.95,.88];
+  const meses    = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const maxVal   = Math.max(...seasonal.map(f=>data.produccionMes*f), data.consumo);
+  const chartEl  = document.getElementById('chartBars');
+  if (chartEl) {
+    chartEl.innerHTML = meses.map((m,i) => {
+      const prod  = data.produccionMes * seasonal[i];
+      const hC = Math.max((data.consumo/maxVal)*110, 3);
+      const hP = Math.max((prod/maxVal)*110, 3);
+      return `<div class="cbar-group">
+        <div class="cbars">
+          <div class="cbar cc" style="height:0" data-h="${hC}" title="${m} Consumo: ${data.consumo.toFixed(0)} kWh"></div>
+          <div class="cbar cp" style="height:0" data-h="${hP}" title="${m} Prod.: ${prod.toFixed(0)} kWh"></div>
+        </div>
+        <div class="cbar-lbl">${m}</div>
+      </div>`;
+    }).join('');
+    setTimeout(()=>{
+      chartEl.querySelectorAll('.cbar').forEach(b => { b.style.height = b.dataset.h+'px'; });
+    }, 150);
+  }
+
+  // Report RF-14
+  const tbody = document.getElementById('reportBody');
+  if (tbody) {
+    const rows = [
+      ['ID Evaluación',           data.evalId,                                        'RF-03'],
+      ['Evaluador',               data.nombre,                                        'HU-01'],
+      ['Tipo de lugar',           (data.tipo||'').charAt(0).toUpperCase()+(data.tipo||'').slice(1),'RF-03'],
+      ['Ubicación',               data.ubicacion,                                     'RF-03'],
+      ['Área del techo',          data.areaTecho.toFixed(2)+' m²',                   'RF-04'],
+      ['Exposición solar',        (data.exposicion||'').charAt(0).toUpperCase()+(data.exposicion||'').slice(1),'RF-06'],
+      ['Horas sol pico',          data.horasSolPico+' h/día',                        'RF-06'],
+      ['Consumo mensual',         formatKwh(data.consumo),                           'RF-05'],
+      ['Tarifa kWh',              formatCOP(data.tarifa)+'/kWh',                     'RF-05'],
+      ['Paneles instalables',     data.numPaneles+' uds',                            'RF-07'],
+      ['Potencia total',          data.potenciaTotal_kW.toFixed(2)+' kWp',           'RF-07'],
+      ['Producción mensual',      formatKwh(data.produccionMes),                     'RF-08'],
+      ['Cobertura',               data.cobertura.toFixed(1)+'%',                     'RF-09'],
+      ['Balance energético',      (data.balance>=0?'+':'')+data.balance.toFixed(1)+' kWh','RF-09'],
+      ['Inversión total',         formatCOP(data.inversionTotal),                    'RF-10'],
+      ['Ahorro mensual',          formatCOP(data.ahorroMensual),                     'RF-11'],
+      ['Payback', isFinite(data.paybackMeses)&&data.paybackMeses<999
+          ? `${Math.round(data.paybackMeses)} meses (${data.paybackAnios.toFixed(1)} años)`
+          : 'No calculable',                                                          'RF-12'],
+      ['Recomendación',           data.recomendacion,                                'RF-13'],
+    ];
+    tbody.innerHTML = rows.map(([p,v,r])=>`
+      <tr><td>${p}</td><td class="td-val">${v}</td><td class="td-rf">${r}</td></tr>
+    `).join('');
+  }
 }
-.card:hover { border-color:rgba(245,197,24,.18); }
-.card-title { font-family:'Syne',sans-serif; font-size:15px; font-weight:700; margin-bottom:3px; }
-.card-sub   { font-size:11px; color:var(--muted); }
 
-/* progress steps */
-.progress-track { display:flex;align-items:center;justify-content:center;gap:0;padding:0 0 28px; }
-.step { display:flex;flex-direction:column;align-items:center;gap:5px; }
-.step-dot {
-  width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
-  font-size:12px;font-weight:700;background:rgba(255,255,255,.07);
-  border:2px solid rgba(255,255,255,.13);color:var(--muted);transition:all .3s;
-}
-.step.active .step-dot { background:var(--grad-gold);border-color:transparent;color:var(--navy);box-shadow:0 0 18px rgba(245,197,24,.35); }
-.step.done  .step-dot  { background:rgba(245,197,24,.18);border-color:var(--amber);color:var(--amber); }
-.step span { font-size:10px;color:var(--muted); }
-.step.active span { color:var(--white); }
-.step-line { width:70px;height:2px;background:rgba(255,255,255,.07);margin-bottom:19px; }
-.step-line.done { background:rgba(245,197,24,.35); }
+// ============================================================
+// BOOT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  const page = window.location.pathname.split('/').pop() || 'index.html';
+  const user = getCurrentUser();
 
-/* ================================================
-   DASHBOARD
-================================================ */
-.dash-welcome {
-  display:flex; align-items:flex-start; justify-content:space-between;
-  margin-bottom:24px;
-}
-.dash-welcome h2 { font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:3px; }
-.dash-welcome p  { font-size:13px;color:var(--muted); }
+  // Rutas protegidas
+  const protected_ = ['dashboard.html','formulario.html','resultados.html'];
+  if (protected_.includes(page) && !user) {
+    window.location.href = 'index.html'; return;
+  }
+  // Si ya autenticado y en login → dashboard
+  if ((page === 'index.html' || page === '') && user) {
+    window.location.href = 'dashboard.html'; return;
+  }
 
-.metrics-row { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:22px; }
-.metric-tile {
-  background:var(--card-bg); border:1px solid var(--border);
-  border-radius:var(--radius); padding:18px 20px;
-  backdrop-filter:blur(8px); animation:card-in .4s ease both;
-}
-.metric-tile-icon { font-size:20px; margin-bottom:10px; }
-.metric-tile-val  { font-family:'Syne',sans-serif;font-size:26px;font-weight:800;background:var(--grad-gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:4px; }
-.metric-tile-lbl  { font-size:11px;color:var(--muted); }
+  loadSidebarUser();
 
-.dash-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-.dash-card { background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:20px;backdrop-filter:blur(8px);animation:card-in .4s ease both; }
-.dash-card-header { display:flex;align-items:center;justify-content:space-between;margin-bottom:16px; }
-.dash-card-header h3 { font-family:'Syne',sans-serif;font-size:14px;font-weight:700; }
-.dash-card-header span { font-size:10px;color:var(--muted); }
-
-/* eval list */
-.eval-list { display:flex;flex-direction:column;gap:8px; }
-.eval-row {
-  display:flex;align-items:center;gap:12px;
-  padding:10px 12px; border-radius:var(--radius-sm);
-  background:rgba(255,255,255,.04); border:1px solid var(--border);
-  transition:background .2s; cursor:pointer;
-}
-.eval-row:hover { background:rgba(255,255,255,.08); }
-.eval-dot { width:8px;height:8px;border-radius:50%;flex-shrink:0; }
-.eval-dot.alta  { background:#10B981; }
-.eval-dot.media { background:var(--amber); }
-.eval-dot.baja  { background:#EF4444; }
-.eval-info { flex:1; }
-.eval-name  { font-size:12px;font-weight:500; }
-.eval-meta  { font-size:10px;color:var(--muted); }
-.eval-chip {
-  font-size:10px;font-weight:600;padding:3px 9px;border-radius:10px;white-space:nowrap;
-}
-.chip-alta  { background:rgba(16,185,129,.15);color:#34D399;border:1px solid rgba(16,185,129,.2); }
-.chip-media { background:rgba(245,159,11,.15);color:var(--amber);border:1px solid rgba(245,159,11,.2); }
-.chip-baja  { background:rgba(239,68,68,.15);color:#F87171;border:1px solid rgba(239,68,68,.2); }
-
-/* mini bar chart */
-.mini-chart { display:flex;align-items:flex-end;gap:5px;height:80px;padding:0 2px; }
-.mini-bar-g { display:flex;flex-direction:column;align-items:center;gap:4px;flex:1; }
-.mini-bars  { display:flex;gap:2px;align-items:flex-end;height:60px;width:100%; }
-.mini-bar   { flex:1;border-radius:3px 3px 0 0;min-height:3px;transition:height .6s ease; }
-.mini-bar.c { background:linear-gradient(to top,var(--orange-d),var(--orange)); }
-.mini-bar.p { background:linear-gradient(to top,#D97706,var(--yellow)); }
-.mini-lbl   { font-size:9px;color:var(--muted); }
-
-/* ================================================
-   EVALUATION FORM
-================================================ */
-.eval-grid { display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:26px; }
-.eval-card { background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:22px;backdrop-filter:blur(10px);animation:card-in .4s ease both;transition:border-color .2s; }
-.eval-card:hover { border-color:rgba(245,197,24,.18); }
-.eval-card-head { display:flex;align-items:flex-start;gap:12px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border); }
-.eval-num { font-family:'Syne',sans-serif;font-size:26px;font-weight:800;background:var(--grad-gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;min-width:32px; }
-.eval-card-head h3 { font-family:'Syne',sans-serif;font-size:14px;font-weight:700; }
-.eval-card-head p  { font-size:10px;color:var(--muted);margin-top:1px; }
-.eval-head-icon    { font-size:20px;margin-left:auto; }
-
-.field-row { display:grid;grid-template-columns:1fr 1fr;gap:10px; }
-.area-mode { display:flex;gap:14px;margin-bottom:14px; }
-.radio-label { display:flex;align-items:center;gap:7px;cursor:pointer;font-size:12px;color:var(--muted); }
-.radio-label input[type=radio] { accent-color:var(--amber);width:14px;height:14px; }
-.radio-label:has(input:checked) { color:var(--white); }
-.area-preview { padding:9px 13px;border-radius:8px;background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.2);font-size:12px;color:var(--yellow);margin-top:7px; }
-.area-preview strong { font-size:15px; }
-
-.exposure-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:5px; }
-.exposure-opt input { display:none; }
-.exp-card { display:flex;flex-direction:column;align-items:center;gap:3px;padding:11px 6px;border-radius:10px;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.09);transition:all .2s;text-align:center;cursor:pointer; }
-.exp-card:hover { border-color:rgba(245,197,24,.3);background:rgba(245,197,24,.06); }
-.exposure-opt input:checked + .exp-card { border-color:var(--amber);background:rgba(245,197,24,.12);box-shadow:0 0 10px rgba(245,197,24,.18); }
-.exp-icon  { font-size:18px; }
-.exp-card strong { font-size:11px; }
-.exp-card small  { font-size:9px;color:var(--muted); }
-
-.form-actions { display:flex;justify-content:flex-end;gap:12px;align-items:center; }
-
-/* ================================================
-   RESULTS
-================================================ */
-.verdict-banner {
-  position:relative;overflow:hidden;border-radius:18px;padding:28px;margin-bottom:22px;
-  background:rgba(17,34,64,.9);border:1px solid var(--border);backdrop-filter:blur(12px);
-  animation:card-in .5s ease both;
-}
-.verdict-glow { position:absolute;inset:0;pointer-events:none;transition:background .5s; }
-.verdict-banner.alta  .verdict-glow { background:radial-gradient(ellipse 55% 70% at 92% 50%,rgba(245,197,24,.18),transparent); }
-.verdict-banner.media .verdict-glow { background:radial-gradient(ellipse 55% 70% at 92% 50%,rgba(14,165,233,.15),transparent); }
-.verdict-banner.baja  .verdict-glow { background:radial-gradient(ellipse 55% 70% at 92% 50%,rgba(249,115,22,.13),transparent); }
-.verdict-content { display:flex;align-items:center;gap:20px;position:relative;z-index:2; }
-.verdict-icon  { font-size:52px;filter:drop-shadow(0 0 18px var(--amber));animation:spin-slow 15s linear infinite; }
-.verdict-label { font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px; }
-.verdict-title { font-family:'Syne',sans-serif;font-size:24px;font-weight:800;margin:3px 0 5px; }
-.verdict-msg   { color:var(--muted);font-size:13px;max-width:460px;line-height:1.5; }
-.verdict-banner.alta  .verdict-title { background:var(--grad-gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent; }
-.verdict-banner.media .verdict-title { background:var(--grad-sky); -webkit-background-clip:text;-webkit-text-fill-color:transparent; }
-.verdict-banner.baja  .verdict-title { color:#FF8C42; }
-.verdict-badge { position:absolute;right:28px;top:50%;transform:translateY(-50%);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;padding:7px 16px;border-radius:28px;background:var(--grad-gold);color:var(--navy); }
-@keyframes spin-slow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-
-.res-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px; }
-.res-tile {
-  background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);
-  padding:18px;backdrop-filter:blur(8px);animation:card-in .4s ease both;transition:border-color .2s;
-}
-.res-tile:hover { border-color:rgba(245,197,24,.22); }
-.res-tile-head  { display:flex;align-items:center;gap:7px;margin-bottom:10px; }
-.res-tile-icon  { font-size:16px; }
-.res-tile-label { font-size:11px;color:var(--muted);flex:1; }
-.res-tile-rf    { font-size:9px;background:rgba(255,255,255,.07);padding:2px 6px;border-radius:8px;color:rgba(255,255,255,.3); }
-.res-tile-val   { font-family:'Syne',sans-serif;font-size:26px;font-weight:800;background:var(--grad-gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.1;margin-bottom:6px; }
-.res-tile-sub   { font-size:10px;color:var(--muted); }
-.bar-track { height:4px;background:rgba(255,255,255,.08);border-radius:3px;margin:6px 0;overflow:hidden; }
-.bar-fill  { height:100%;border-radius:3px;background:var(--grad-gold);transition:width 1s cubic-bezier(.4,0,.2,1); }
-
-.chart-card { background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:18px; }
-.chart-card-head { display:flex;align-items:center;justify-content:space-between;margin-bottom:18px; }
-.chart-card-head h3 { font-family:'Syne',sans-serif;font-size:14px;font-weight:700; }
-.chart-bars { display:flex;align-items:flex-end;gap:3px;height:140px;padding:0 2px; }
-.cbar-group { display:flex;flex-direction:column;align-items:center;flex:1; }
-.cbars { display:flex;gap:2px;align-items:flex-end;width:100%;height:120px; }
-.cbar { flex:1;border-radius:3px 3px 0 0;min-height:3px;min-width:14px; }
-.cbar.cc { background:linear-gradient(to top,var(--orange-d),var(--orange)); }
-.cbar.cp { background:linear-gradient(to top,#D97706,var(--yellow)); }
-.cbar-lbl { font-size:9px;color:var(--muted);margin-top:5px; }
-.chart-legend { display:flex;gap:16px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border); }
-.leg-item { display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted); }
-.leg-dot  { width:9px;height:9px;border-radius:2px; }
-
-.report-card { background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:28px; }
-.report-head { display:flex;align-items:center;gap:10px;margin-bottom:16px; }
-.report-head h3 { font-family:'Syne',sans-serif;font-size:14px;font-weight:700;flex:1; }
-.btn-print { background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);color:var(--muted);padding:6px 12px;border-radius:8px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s; }
-.btn-print:hover { border-color:var(--amber);color:var(--amber); }
-.report-table { width:100%;border-collapse:collapse;font-size:12px; }
-.report-table th { text-align:left;padding:9px 12px;background:rgba(255,255,255,.04);color:var(--muted);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border); }
-.report-table td { padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.04); }
-.report-table tr:last-child td { border-bottom:none; }
-.report-table tbody tr:hover td { background:rgba(255,255,255,.03); }
-.td-val { font-weight:600;color:var(--yellow); }
-.td-rf  { font-size:10px;color:rgba(255,255,255,.28); }
-
-.res-actions { display:flex;justify-content:space-between;gap:12px; }
-
-/* ================================================
-   RESPONSIVE
-================================================ */
-@media(max-width:900px){
-  .sidebar{transform:translateX(-100%);transition:transform .3s;}
-  .sidebar.open{transform:translateX(0);}
-  .main-area{margin-left:0;}
-  .eval-grid,.res-grid,.metrics-row{grid-template-columns:1fr 1fr;}
-  .dash-grid{grid-template-columns:1fr;}
-}
-@media(max-width:600px){
-  .eval-grid,.res-grid,.metrics-row,.dash-grid{grid-template-columns:1fr;}
-  .field-row{grid-template-columns:1fr;}
-  .exposure-grid{grid-template-columns:1fr;}
-  .verdict-badge{display:none;}
-  .page-content{padding:18px;}
-}
-@media print{
-  .sidebar,.topbar,.res-actions,.btn-print,.orb,.bg-mesh{display:none!important;}
-  body{background:#fff!important;color:#000!important;}
-  .main-area{margin-left:0;}
-}
+  if (page === 'dashboard.html')  renderDashboard();
+  if (page === 'resultados.html') renderResultados();
+});

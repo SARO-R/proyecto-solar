@@ -1,1 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Solar Advisor — Dashboard</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+</head>
+<body>
+  <div class="bg-mesh"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
 
+  <div class="app-shell">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="sb-logo">
+          <div class="sb-logo-icon">☀</div>
+          <span class="sb-logo-text">Solar<em>Advisor</em></span>
+        </div>
+        <p class="sb-tagline">Optimiza tu energía solar</p>
+      </div>
+
+      <nav class="sidebar-nav">
+        <span class="nav-section-label">Principal</span>
+        <a class="nav-item active" href="dashboard.html">
+          <span class="nav-icon">▦</span> Dashboard
+        </a>
+        <a class="nav-item" href="formulario.html">
+          <span class="nav-icon">＋</span> Nueva evaluación
+        </a>
+
+        <span class="nav-section-label">Historial</span>
+        <a class="nav-item" href="#" onclick="mostrarHistorial()">
+          <span class="nav-icon">☰</span> Mis evaluaciones
+          <span class="nav-badge" id="sbEvalCount">0</span>
+        </a>
+
+        <span class="nav-section-label">Cuenta</span>
+        <a class="nav-item" href="index.html" onclick="logout(); return false;">
+          <span class="nav-icon">⇐</span> Cerrar sesión
+        </a>
+      </nav>
+
+      <div class="sidebar-user">
+        <div class="user-avatar" id="sbAvatar">?</div>
+        <div>
+          <div class="user-info-name"  id="sbUserName">—</div>
+          <div class="user-info-email" id="sbUserEmail">—</div>
+        </div>
+        <button class="btn-logout-sm" onclick="logout()" title="Salir">✕</button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main-area">
+      <div class="topbar">
+        <span class="topbar-title">Dashboard</span>
+        <div class="topbar-right">
+          <a href="formulario.html" class="btn-primary btn-md">+ Nueva evaluación</a>
+        </div>
+      </div>
+
+      <div class="page-content">
+
+        <!-- Bienvenida -->
+        <div class="dash-welcome">
+          <div>
+            <h2 id="dashWelcome">Bienvenido 👋</h2>
+            <p>Resumen de tus evaluaciones solares</p>
+          </div>
+        </div>
+
+        <!-- Métricas rápidas -->
+        <div class="metrics-row">
+          <div class="metric-tile">
+            <div class="metric-tile-icon">📋</div>
+            <div class="metric-tile-val" id="mTotalEvals">0</div>
+            <div class="metric-tile-lbl">Evaluaciones realizadas</div>
+          </div>
+          <div class="metric-tile">
+            <div class="metric-tile-icon">☀</div>
+            <div class="metric-tile-val" id="mAltaCount">0</div>
+            <div class="metric-tile-lbl">Altamente recomendables</div>
+          </div>
+          <div class="metric-tile">
+            <div class="metric-tile-icon">💰</div>
+            <div class="metric-tile-val" id="mAvgAhorro">—</div>
+            <div class="metric-tile-lbl">Ahorro mensual promedio</div>
+          </div>
+          <div class="metric-tile">
+            <div class="metric-tile-icon">📊</div>
+            <div class="metric-tile-val" id="mAvgCob">—</div>
+            <div class="metric-tile-lbl">Cobertura promedio</div>
+          </div>
+        </div>
+
+        <!-- Grid principal -->
+        <div class="dash-grid">
+
+          <!-- Evaluaciones recientes -->
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <h3>Evaluaciones recientes</h3>
+              <span id="evalCountLabel">0 registros</span>
+            </div>
+            <div class="eval-list" id="evalList">
+              <div style="text-align:center;padding:32px;color:var(--muted);font-size:13px;">
+                <div style="font-size:32px;margin-bottom:10px;">📋</div>
+                Aún no tienes evaluaciones.<br/>
+                <a href="formulario.html" style="color:var(--amber);text-decoration:none;">Crear primera evaluación →</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Gráfica comparativa -->
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <h3>Consumo vs Producción</h3>
+              <span>Últimas evaluaciones</span>
+            </div>
+            <div class="mini-chart" id="dashMiniChart" style="align-items:flex-end;height:100px;">
+              <div style="text-align:center;width:100%;padding:20px 0;color:var(--muted);font-size:12px;">Sin datos aún</div>
+            </div>
+            <div class="chart-legend" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
+              <span class="leg-item"><span class="leg-dot" style="background:var(--orange)"></span>Consumo</span>
+              <span class="leg-item"><span class="leg-dot" style="background:var(--yellow)"></span>Producción</span>
+            </div>
+          </div>
+
+        </div><!-- /dash-grid -->
+      </div><!-- /page-content -->
+    </div><!-- /main-area -->
+  </div><!-- /app-shell -->
+
+  <script src="script.js"></script>
+</body>
+</html>

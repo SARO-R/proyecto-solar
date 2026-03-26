@@ -2,41 +2,32 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Solar Advisor — Acceso</title>
   <link rel="stylesheet" href="styles.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 </head>
 <body class="auth-page">
-
   <div class="bg-mesh"></div>
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
-
-  <div class="sun-widget">
-    <div class="sun-ring ring-3"></div>
-    <div class="sun-ring ring-2"></div>
-    <div class="sun-ring ring-1"></div>
-    <div class="sun-core">☀</div>
-  </div>
 
   <main class="auth-container">
-    <div class="auth-card" id="authCard">
+    <div class="auth-card">
 
       <div class="brand">
-        <span class="brand-icon">⚡</span>
+        <span class="brand-icon">☀</span>
         <h1 class="brand-title">Solar<em>Advisor</em></h1>
-        <p class="brand-sub">Optimiza tu uso de energía solar</p>
+        <p class="brand-sub">Bienvenido a Solar Advisor · Optimiza tu uso de energía solar</p>
       </div>
 
       <div class="tab-switcher">
-        <button class="tab-btn active" id="tabLogin" onclick="switchTab('login')">Ingresar</button>
-        <button class="tab-btn" id="tabRegister" onclick="switchTab('register')">Registrarse</button>
+        <button class="tab-btn active" id="tabLogin"    onclick="switchTab('login')">Ingresar</button>
+        <button class="tab-btn"        id="tabRegister" onclick="switchTab('register')">Registrarse</button>
         <div class="tab-indicator" id="tabIndicator"></div>
       </div>
 
-      <!-- LOGIN (HU-02 / RF-02) -->
+      <!-- LOGIN HU-02 / RF-02 -->
       <form id="loginForm" class="auth-form" novalidate>
         <div class="field">
           <label for="loginEmail">Correo electrónico</label>
@@ -51,18 +42,17 @@
           <div class="input-wrap">
             <span class="i-icon">🔒</span>
             <input type="password" id="loginPass" placeholder="Tu contraseña"/>
-            <button type="button" class="toggle-pass" onclick="togglePass('loginPass', this)">👁</button>
+            <button type="button" class="toggle-pass" onclick="togglePass('loginPass',this)">👁</button>
           </div>
           <span class="field-error" id="errLoginPass"></span>
         </div>
         <span class="field-error global-error" id="errLoginGlobal"></span>
         <button type="button" class="btn-primary" onclick="handleLogin()">
-          <span>Ingresar al sistema</span>
-          <span class="btn-arrow">→</span>
+          <span>Ingresar al sistema</span><span class="btn-arrow">→</span>
         </button>
       </form>
 
-      <!-- REGISTER (HU-01 / RF-01) -->
+      <!-- REGISTER HU-01 / RF-01 -->
       <form id="registerForm" class="auth-form hidden" novalidate>
         <div class="field">
           <label for="regName">Nombre completo</label>
@@ -93,19 +83,18 @@
           <div class="input-wrap">
             <span class="i-icon">🔒</span>
             <input type="password" id="regPass" placeholder="Mínimo 6 caracteres"/>
-            <button type="button" class="toggle-pass" onclick="togglePass('regPass', this)">👁</button>
+            <button type="button" class="toggle-pass" onclick="togglePass('regPass',this)">👁</button>
           </div>
           <span class="field-error" id="errRegPass"></span>
         </div>
         <span class="field-error global-error" id="errRegGlobal"></span>
         <button type="button" class="btn-primary" onclick="handleRegister()">
-          <span>Crear cuenta</span>
-          <span class="btn-arrow">→</span>
+          <span>Crear cuenta</span><span class="btn-arrow">→</span>
         </button>
       </form>
 
     </div>
-    <p class="auth-footer">Solar Advisor · Universidad Manuela Beltrán</p>
+    <p class="auth-footer">Solar Advisor · Universidad Manuela Beltrán · 2025</p>
   </main>
 
   <script src="script.js"></script>

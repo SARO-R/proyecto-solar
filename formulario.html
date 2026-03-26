@@ -1,29 +1,278 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Evaluación Solar</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Solar Advisor — Evaluación Solar</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
 </head>
-<body>
+<body class="form-page">
 
-<div class="card">
-    <h2>Evaluación Solar</h2>
-    <p>Completa los datos para analizar tu caso</p>
+  <div class="bg-mesh"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
 
-    <input type="text" id="nombre" placeholder="Nombre">
-    <input type="number" id="consumo" placeholder="Consumo mensual (kWh)">
+  <!-- NAVBAR -->
+  <nav class="topnav">
+    <div class="nav-brand">
+      <span class="brand-icon-sm">⚡</span>
+      <span class="nav-title">Solar<em>Advisor</em></span>
+    </div>
+    <div class="nav-user">
+      <span class="user-badge" id="navUserName">Usuario</span>
+      <button class="btn-logout" onclick="logout()">Salir →</button>
+    </div>
+  </nav>
 
-    <p>¿Tu zona tiene buena exposición solar?</p>
-    <select id="zona">
-        <option value="">Selecciona</option>
-        <option value="alta">Alta ☀️</option>
-        <option value="media">Media 🌤️</option>
-        <option value="baja">Baja 🌥️</option>
-    </select>
+  <main class="form-container">
 
-    <button onclick="evaluar()">Analizar</button>
-</div>
+    <!-- PROGRESS STEPS -->
+    <div class="progress-track">
+      <div class="step done">
+        <div class="step-dot">✓</div>
+        <span>Acceso</span>
+      </div>
+      <div class="step-line done"></div>
+      <div class="step active">
+        <div class="step-dot">2</div>
+        <span>Evaluación</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step">
+        <div class="step-dot">3</div>
+        <span>Resultados</span>
+      </div>
+    </div>
 
-<script src="script.js"></script>
+    <div class="form-header">
+      <h2 class="section-title">Evaluación Solar</h2>
+      <p class="section-sub">Completa los datos para analizar la viabilidad de paneles solares en tu propiedad</p>
+    </div>
+
+    <div class="form-grid">
+
+      <!-- CARD 1: Datos del lugar (HU-03 / RF-03) -->
+      <div class="eval-card" id="card-location">
+        <div class="card-header">
+          <div class="card-num">01</div>
+          <div>
+            <h3>Datos del lugar</h3>
+            <p>HU-03 · RF-03 — Crear evaluación</p>
+          </div>
+          <span class="card-icon">📍</span>
+        </div>
+        <div class="card-body">
+          <div class="field">
+            <label for="nombreUsuario">Nombre del evaluador</label>
+            <div class="input-wrap">
+              <span class="i-icon">👤</span>
+              <input type="text" id="nombreUsuario" placeholder="Nombre completo"/>
+            </div>
+            <span class="field-error" id="errNombre"></span>
+          </div>
+          <div class="field">
+            <label for="tipoLugar">Tipo de lugar</label>
+            <div class="input-wrap select-wrap">
+              <span class="i-icon">🏠</span>
+              <select id="tipoLugar">
+                <option value="">— Selecciona —</option>
+                <option value="residencial">Residencial</option>
+                <option value="comercial">Comercial</option>
+                <option value="industrial">Industrial</option>
+              </select>
+            </div>
+            <span class="field-error" id="errTipo"></span>
+          </div>
+          <div class="field">
+            <label for="ubicacion">Ubicación / Dirección</label>
+            <div class="input-wrap">
+              <span class="i-icon">🗺</span>
+              <input type="text" id="ubicacion" placeholder="Ej: Calle 85 #15-30, Bogotá"/>
+            </div>
+            <span class="field-error" id="errUbicacion"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 2: Área del techo (HU-04 / RF-04) -->
+      <div class="eval-card" id="card-area">
+        <div class="card-header">
+          <div class="card-num">02</div>
+          <div>
+            <h3>Área del techo</h3>
+            <p>HU-04 · RF-04 — Registrar área</p>
+          </div>
+          <span class="card-icon">📐</span>
+        </div>
+        <div class="card-body">
+          <div class="area-mode">
+            <label class="radio-label">
+              <input type="radio" name="areaMode" value="dimensiones" checked onchange="toggleAreaMode(this.value)"/>
+              <span>Largo y ancho</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="areaMode" value="total" onchange="toggleAreaMode(this.value)"/>
+              <span>Área total directa</span>
+            </label>
+          </div>
+
+          <div id="modeDimensiones">
+            <div class="field-row">
+              <div class="field">
+                <label for="largo">Largo (m)</label>
+                <div class="input-wrap">
+                  <span class="i-icon">↔</span>
+                  <input type="number" id="largo" placeholder="0" min="0.1" step="0.1" oninput="calcularArea()"/>
+                </div>
+              </div>
+              <div class="field">
+                <label for="ancho">Ancho (m)</label>
+                <div class="input-wrap">
+                  <span class="i-icon">↕</span>
+                  <input type="number" id="ancho" placeholder="0" min="0.1" step="0.1" oninput="calcularArea()"/>
+                </div>
+              </div>
+            </div>
+            <div class="area-preview" id="areaPreview">
+              Área calculada: <strong id="areaResult">— m²</strong>
+            </div>
+          </div>
+
+          <div id="modeTotal" class="hidden">
+            <div class="field">
+              <label for="areaTotalDirecta">Área total (m²)</label>
+              <div class="input-wrap">
+                <span class="i-icon">▭</span>
+                <input type="number" id="areaTotalDirecta" placeholder="Ej: 30" min="0.1" step="0.1"/>
+              </div>
+            </div>
+          </div>
+          <span class="field-error" id="errArea"></span>
+        </div>
+      </div>
+
+      <!-- CARD 3: Consumo y exposición (HU-05 / RF-05) -->
+      <div class="eval-card" id="card-consumo">
+        <div class="card-header">
+          <div class="card-num">03</div>
+          <div>
+            <h3>Energía y exposición</h3>
+            <p>HU-05 · RF-05 — Consumo eléctrico</p>
+          </div>
+          <span class="card-icon">⚡</span>
+        </div>
+        <div class="card-body">
+          <div class="field">
+            <label for="consumoKwh">Consumo mensual (kWh)</label>
+            <div class="input-wrap">
+              <span class="i-icon">🔋</span>
+              <input type="number" id="consumoKwh" placeholder="Ej: 300" min="1" step="1"/>
+            </div>
+            <span class="hint">Revisa tu factura de energía</span>
+            <span class="field-error" id="errConsumo"></span>
+          </div>
+          <div class="field">
+            <label for="tarifaKwh">Tarifa por kWh (COP)</label>
+            <div class="input-wrap">
+              <span class="i-icon">💰</span>
+              <input type="number" id="tarifaKwh" placeholder="Ej: 600" min="1" step="1"/>
+            </div>
+            <span class="hint">Precio promedio por kWh en tu factura</span>
+            <span class="field-error" id="errTarifa"></span>
+          </div>
+          <div class="field">
+            <label>Nivel de exposición solar</label>
+            <div class="exposure-grid">
+              <label class="exposure-opt" id="expAlta">
+                <input type="radio" name="exposicion" value="alta"/>
+                <div class="exp-card">
+                  <span class="exp-icon">🌞</span>
+                  <strong>Alta</strong>
+                  <small>Más de 5h sol/día</small>
+                </div>
+              </label>
+              <label class="exposure-opt" id="expMedia">
+                <input type="radio" name="exposicion" value="media"/>
+                <div class="exp-card">
+                  <span class="exp-icon">⛅</span>
+                  <strong>Media</strong>
+                  <small>3 a 5h sol/día</small>
+                </div>
+              </label>
+              <label class="exposure-opt" id="expBaja">
+                <input type="radio" name="exposicion" value="baja"/>
+                <div class="exp-card">
+                  <span class="exp-icon">🌥</span>
+                  <strong>Baja</strong>
+                  <small>Menos de 3h sol/día</small>
+                </div>
+              </label>
+            </div>
+            <span class="field-error" id="errExposicion"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 4: Parámetros del panel (RF-07 / RF-08) -->
+      <div class="eval-card" id="card-panel">
+        <div class="card-header">
+          <div class="card-num">04</div>
+          <div>
+            <h3>Parámetros del panel</h3>
+            <p>RF-07 · RF-08 — Cálculo de producción</p>
+          </div>
+          <span class="card-icon">🔆</span>
+        </div>
+        <div class="card-body">
+          <div class="field-row">
+            <div class="field">
+              <label for="potenciaPanel">Potencia panel (W)</label>
+              <div class="input-wrap">
+                <span class="i-icon">⚡</span>
+                <input type="number" id="potenciaPanel" value="400" min="50" step="10"/>
+              </div>
+            </div>
+            <div class="field">
+              <label for="areaPanel">Área panel (m²)</label>
+              <div class="input-wrap">
+                <span class="i-icon">▭</span>
+                <input type="number" id="areaPanel" value="2" min="0.5" step="0.1"/>
+              </div>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="precioPanel">Precio por panel (COP)</label>
+              <div class="input-wrap">
+                <span class="i-icon">💵</span>
+                <input type="number" id="precioPanel" value="800000" min="100000" step="50000"/>
+              </div>
+            </div>
+            <div class="field">
+              <label for="costosAdicionales">Costos adicionales (COP)</label>
+              <div class="input-wrap">
+                <span class="i-icon">🔧</span>
+                <input type="number" id="costosAdicionales" value="500000" min="0" step="50000"/>
+              </div>
+            </div>
+          </div>
+          <span class="hint">Valores de referencia precargados. Puedes ajustarlos.</span>
+        </div>
+      </div>
+
+    </div><!-- /form-grid -->
+
+    <div class="form-actions">
+      <button class="btn-secondary" onclick="limpiarFormulario()">↺ Limpiar</button>
+      <button class="btn-primary btn-lg" onclick="procesarEvaluacion()">
+        <span>Calcular y ver resultados</span>
+        <span class="btn-arrow">→</span>
+      </button>
+    </div>
+
+  </main>
+
+  <script src="script.js"></script>
 </body>
 </html>

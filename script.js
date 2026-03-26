@@ -1,5 +1,3 @@
-body {
-    font-family: Arial;
-    text-align: center;
-    background-color: #f4f4f4;
+function saludar() {
+    alert("Hola, funciona correctamente 🚀");
 }

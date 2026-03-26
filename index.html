@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Proyecto Solar</title>
+    <title>Login</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Bienvenido</h1>
-    <p>Este es mi proyecto</p>
-    <button onclick="saludar()">Click</button>
+
+    <div class="container">
+        <h1>Iniciar Sesión</h1>
+
+        <input type="text" id="usuario" placeholder="Usuario">
+        <input type="password" id="password" placeholder="Contraseña">
+
+        <button onclick="login()">Ingresar</button>
+    </div>
 
     <script src="script.js"></script>
 </body>

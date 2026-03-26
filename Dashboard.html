@@ -2,140 +2,154 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Solar Advisor — Dashboard</title>
   <link rel="stylesheet" href="styles.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 </head>
-<body>
-  <div class="bg-mesh"></div>
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
+<body class="page-app">
 
-  <div class="app-shell">
-
-    <!-- SIDEBAR -->
-    <aside class="sidebar" id="sidebar">
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
       <div class="sidebar-brand">
-        <div class="sb-logo">
-          <div class="sb-logo-icon">☀</div>
-          <span class="sb-logo-text">Solar<em>Advisor</em></span>
+        <div class="brand-icon sm">
+          <svg width="22" height="22" viewBox="0 0 36 36" fill="none">
+            <circle cx="18" cy="18" r="8" fill="#FFB800"/>
+            <line x1="18" y1="2" x2="18" y2="6" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="18" y1="30" x2="18" y2="34" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="2" y1="18" x2="6" y2="18" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="30" y1="18" x2="34" y2="18" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="6.34" y1="6.34" x2="9.17" y2="9.17" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="26.83" y1="26.83" x2="29.66" y2="29.66" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="29.66" y1="6.34" x2="26.83" y2="9.17" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="9.17" y1="26.83" x2="6.34" y2="29.66" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
         </div>
-        <p class="sb-tagline">Optimiza tu energía solar</p>
+        <span>Solar Advisor</span>
       </div>
 
       <nav class="sidebar-nav">
-        <span class="nav-section-label">Principal</span>
-        <a class="nav-item active" href="dashboard.html">
-          <span class="nav-icon">▦</span> Dashboard
+        <a href="Dashboard.html" class="nav-item active">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/></svg>
+          Dashboard
         </a>
-        <a class="nav-item" href="formulario.html">
-          <span class="nav-icon">＋</span> Nueva evaluación
+        <a href="formulario.html" class="nav-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Nueva evaluación
         </a>
-
-        <span class="nav-section-label">Historial</span>
-        <a class="nav-item" href="#" onclick="mostrarHistorial()">
-          <span class="nav-icon">☰</span> Mis evaluaciones
-          <span class="nav-badge" id="sbEvalCount">0</span>
-        </a>
-
-        <span class="nav-section-label">Cuenta</span>
-        <a class="nav-item" href="index.html" onclick="logout(); return false;">
-          <span class="nav-icon">⇐</span> Cerrar sesión
+        <a href="resultados.html" class="nav-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Resultados
         </a>
       </nav>
 
-      <div class="sidebar-user">
-        <div class="user-avatar" id="sbAvatar">?</div>
-        <div>
-          <div class="user-info-name"  id="sbUserName">—</div>
-          <div class="user-info-email" id="sbUserEmail">—</div>
-        </div>
-        <button class="btn-logout-sm" onclick="logout()" title="Salir">✕</button>
+      <div class="sidebar-footer">
+        <div class="user-chip" id="sidebar-user"></div>
+        <button class="btn-logout" onclick="handleLogout()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Salir
+        </button>
       </div>
     </aside>
 
-    <!-- MAIN -->
-    <div class="main-area">
-      <div class="topbar">
-        <span class="topbar-title">Dashboard</span>
-        <div class="topbar-right">
-          <a href="formulario.html" class="btn-primary btn-md">+ Nueva evaluación</a>
+    <!-- Main -->
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Dashboard</h1>
+          <p class="page-subtitle" id="dash-welcome">Bienvenido de nuevo</p>
+        </div>
+        <a href="formulario.html" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 4v16m-8-8h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          Nueva evaluación
+        </a>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon solar">☀️</div>
+          <div class="stat-info">
+            <span class="stat-value" id="stat-total">0</span>
+            <span class="stat-label">Evaluaciones</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">✅</div>
+          <div class="stat-info">
+            <span class="stat-value" id="stat-rec">0</span>
+            <span class="stat-label">Recomendadas</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange">⚡</div>
+          <div class="stat-info">
+            <span class="stat-value" id="stat-kwh">—</span>
+            <span class="stat-label">Último consumo</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue">💰</div>
+          <div class="stat-info">
+            <span class="stat-value" id="stat-saving">—</span>
+            <span class="stat-label">Ahorro estimado</span>
+          </div>
         </div>
       </div>
 
-      <div class="page-content">
-
-        <!-- Bienvenida -->
-        <div class="dash-welcome">
-          <div>
-            <h2 id="dashWelcome">Bienvenido 👋</h2>
-            <p>Resumen de tus evaluaciones solares</p>
+      <!-- Historial -->
+      <div class="section-card">
+        <div class="section-header">
+          <h2>Historial de evaluaciones</h2>
+        </div>
+        <div id="history-list">
+          <div class="empty-state">
+            <div class="empty-icon">🌤️</div>
+            <p>Aún no tienes evaluaciones.<br/>¡Comienza tu primera evaluación solar!</p>
+            <a href="formulario.html" class="btn btn-primary" style="margin-top:1rem">Evaluar ahora</a>
           </div>
         </div>
-
-        <!-- Métricas rápidas -->
-        <div class="metrics-row">
-          <div class="metric-tile">
-            <div class="metric-tile-icon">📋</div>
-            <div class="metric-tile-val" id="mTotalEvals">0</div>
-            <div class="metric-tile-lbl">Evaluaciones realizadas</div>
-          </div>
-          <div class="metric-tile">
-            <div class="metric-tile-icon">☀</div>
-            <div class="metric-tile-val" id="mAltaCount">0</div>
-            <div class="metric-tile-lbl">Altamente recomendables</div>
-          </div>
-          <div class="metric-tile">
-            <div class="metric-tile-icon">💰</div>
-            <div class="metric-tile-val" id="mAvgAhorro">—</div>
-            <div class="metric-tile-lbl">Ahorro mensual promedio</div>
-          </div>
-          <div class="metric-tile">
-            <div class="metric-tile-icon">📊</div>
-            <div class="metric-tile-val" id="mAvgCob">—</div>
-            <div class="metric-tile-lbl">Cobertura promedio</div>
-          </div>
-        </div>
-
-        <!-- Grid principal -->
-        <div class="dash-grid">
-
-          <!-- Evaluaciones recientes -->
-          <div class="dash-card">
-            <div class="dash-card-header">
-              <h3>Evaluaciones recientes</h3>
-              <span id="evalCountLabel">0 registros</span>
-            </div>
-            <div class="eval-list" id="evalList">
-              <div style="text-align:center;padding:32px;color:var(--muted);font-size:13px;">
-                <div style="font-size:32px;margin-bottom:10px;">📋</div>
-                Aún no tienes evaluaciones.<br/>
-                <a href="formulario.html" style="color:var(--amber);text-decoration:none;">Crear primera evaluación →</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Gráfica comparativa -->
-          <div class="dash-card">
-            <div class="dash-card-header">
-              <h3>Consumo vs Producción</h3>
-              <span>Últimas evaluaciones</span>
-            </div>
-            <div class="mini-chart" id="dashMiniChart" style="align-items:flex-end;height:100px;">
-              <div style="text-align:center;width:100%;padding:20px 0;color:var(--muted);font-size:12px;">Sin datos aún</div>
-            </div>
-            <div class="chart-legend" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
-              <span class="leg-item"><span class="leg-dot" style="background:var(--orange)"></span>Consumo</span>
-              <span class="leg-item"><span class="leg-dot" style="background:var(--yellow)"></span>Producción</span>
-            </div>
-          </div>
-
-        </div><!-- /dash-grid -->
-      </div><!-- /page-content -->
-    </div><!-- /main-area -->
-  </div><!-- /app-shell -->
+      </div>
+    </main>
+  </div>
 
   <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = JSON.parse(localStorage.getItem('sa_current_user') || 'null');
+      if (!user) { window.location.href = 'index.html'; return; }
+      document.getElementById('sidebar-user').textContent = user.name || user.email;
+      document.getElementById('dash-welcome').textContent = `Hola, ${user.name || 'Usuario'} 👋`;
+      loadDashboardStats();
+    });
+
+    function loadDashboardStats() {
+      const history = JSON.parse(localStorage.getItem('sa_evaluations') || '[]');
+      document.getElementById('stat-total').textContent = history.length;
+      const rec = history.filter(e => e.result !== 'No recomendable').length;
+      document.getElementById('stat-rec').textContent = rec;
+      if (history.length > 0) {
+        const last = history[history.length - 1];
+        document.getElementById('stat-kwh').textContent = last.consumo + ' kWh';
+        document.getElementById('stat-saving').textContent = last.ahorro ? '$' + last.ahorro.toLocaleString() : '—';
+      }
+
+      const list = document.getElementById('history-list');
+      if (history.length === 0) return;
+      list.innerHTML = history.slice().reverse().map((e, i) => `
+        <div class="history-item">
+          <div class="history-icon">${e.exposicion === 'alta' ? '☀️' : e.exposicion === 'media' ? '⛅' : '☁️'}</div>
+          <div class="history-info">
+            <span class="history-name">${e.nombre}</span>
+            <span class="history-meta">${e.lugar || 'Hogar'} · ${e.consumo} kWh · ${e.exposicion}</span>
+          </div>
+          <div class="history-badge badge-${e.result === 'Altamente recomendable' ? 'green' : e.result === 'Moderadamente recomendable' ? 'yellow' : 'red'}">
+            ${e.result}
+          </div>
+        </div>
+      `).join('');
+    }
+  </script>
 </body>
 </html>

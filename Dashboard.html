@@ -1,155 +1,652 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Solar Advisor — Dashboard</title>
-  <link rel="stylesheet" href="styles.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar Advisor | Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f4f7fc;
+            color: #1e2a3e;
+        }
+
+        .header {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1e3a5f, #2b5a3b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: #4a5568;
+            font-weight: 500;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav a:hover, .nav a.active {
+            color: #f59e0b;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: #f1f5f9;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+        }
+
+        .user-menu span {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .welcome-section {
+            background: linear-gradient(135deg, #1e3a5f 0%, #0f2b3f 100%);
+            border-radius: 28px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .welcome-text h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .date-badge {
+            background: rgba(255,255,255,0.15);
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        .welcome-stats {
+            display: flex;
+            gap: 2rem;
+            background: rgba(255,255,255,0.1);
+            padding: 1rem 2rem;
+            border-radius: 24px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #fbbf24;
+        }
+
+        .actions-section {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .action-card {
+            background: white;
+            border-radius: 24px;
+            padding: 1.5rem;
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .action-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+            border-color: #fbbf24;
+        }
+
+        .action-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.8rem;
+            color: #f59e0b;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        /* Tarjeta de evaluación con información COMPLETA */
+        .evaluations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .eval-card {
+            background: white;
+            border-radius: 24px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+            border: 1px solid #eef2ff;
+        }
+
+        .eval-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+        }
+
+        .eval-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .eval-id {
+            font-weight: 700;
+            color: #f59e0b;
+            background: #fef3c7;
+            padding: 0.25rem 0.75rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+        }
+
+        .eval-date {
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        .eval-type {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .type-residencial { background: #dcfce7; color: #166534; }
+        .type-comercial { background: #dbeafe; color: #1e40af; }
+        .type-industrial { background: #fed7aa; color: #9a3412; }
+
+        /* Grid de información completa */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin: 1rem 0;
+            padding: 1rem 0;
+            border-top: 1px solid #eef2ff;
+            border-bottom: 1px solid #eef2ff;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 0.7rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #1e2a3e;
+        }
+
+        .info-value-large {
+            font-size: 1.2rem;
+            color: #f59e0b;
+        }
+
+        .recomendacion {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 16px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .recomendacion-alta {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .recomendacion-media {
+            background: #fef9c3;
+            color: #854d0e;
+        }
+
+        .recomendacion-baja {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .eval-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn-sm {
+            flex: 1;
+            padding: 0.6rem;
+            border-radius: 40px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-view {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        .btn-delete {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 24px;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+        }
+
+        .tips-section {
+            background: linear-gradient(135deg, #fef9e3, #fff7ed);
+            border-radius: 24px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            .evaluations-grid { grid-template-columns: 1fr; }
+            .info-grid { grid-template-columns: 1fr; }
+            .welcome-section { flex-direction: column; text-align: center; }
+            .actions-section { flex-direction: column; }
+        }
+    </style>
 </head>
-<body class="page-app">
-
-  <div class="app-layout">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="sidebar-brand">
-        <div class="brand-icon sm">
-          <svg width="22" height="22" viewBox="0 0 36 36" fill="none">
-            <circle cx="18" cy="18" r="8" fill="#FFB800"/>
-            <line x1="18" y1="2" x2="18" y2="6" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="18" y1="30" x2="18" y2="34" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="2" y1="18" x2="6" y2="18" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="30" y1="18" x2="34" y2="18" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="6.34" y1="6.34" x2="9.17" y2="9.17" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="26.83" y1="26.83" x2="29.66" y2="29.66" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="29.66" y1="6.34" x2="26.83" y2="9.17" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="9.17" y1="26.83" x2="6.34" y2="29.66" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
-          </svg>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-sun" style="color: white;"></i></div>
+                <h1>Solar Advisor</h1>
+            </div>
+            <div class="nav">
+                <a href="Dashboard.html" class="active"><i class="fas fa-chart-line"></i> Dashboard</a>
+                <a href="formulario.html"><i class="fas fa-plus-circle"></i> Nueva Evaluación</a>
+                <a href="resultados.html"><i class="fas fa-chart-bar"></i> Resultados</a>
+            </div>
+            <div class="user-menu">
+                <i class="fas fa-user-circle"></i>
+                <span id="userName">Usuario</span>
+                <a href="index.html" style="color: #94a3b8;"><i class="fas fa-sign-out-alt"></i></a>
+            </div>
         </div>
-        <span>Solar Advisor</span>
-      </div>
+    </header>
 
-      <nav class="sidebar-nav">
-        <a href="Dashboard.html" class="nav-item active">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/></svg>
-          Dashboard
-        </a>
-        <a href="formulario.html" class="nav-item">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          Nueva evaluación
-        </a>
-        <a href="resultados.html" class="nav-item">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Resultados
-        </a>
-      </nav>
+    <div class="container">
+        <div class="welcome-section">
+            <div class="welcome-text">
+                <h2>¡Bienvenido de nuevo, <span id="welcomeName">Usuario</span>! ☀️</h2>
+                <p>Gestiona tus evaluaciones solares y descubre el potencial de tu instalación.</p>
+                <div class="date-badge"><i class="fas fa-calendar-alt"></i> <span id="currentDate"></span></div>
+            </div>
+            <div class="welcome-stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalEvaluaciones">0</div>
+                    <div class="stat-label">Evaluaciones</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="totalPaneles">0</div>
+                    <div class="stat-label">Paneles estimados</div>
+                </div>
+            </div>
+        </div>
 
-      <div class="sidebar-footer">
-        <div class="user-chip" id="sidebar-user"></div>
-        <button class="btn-logout" onclick="handleLogout()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Salir
-        </button>
-      </div>
-    </aside>
+        <div class="actions-section">
+            <div class="action-card" onclick="window.location.href='formulario.html'">
+                <div class="action-icon"><i class="fas fa-plus"></i></div>
+                <h3>Nueva Evaluación</h3>
+                <p>Analiza un nuevo proyecto solar</p>
+            </div>
+            <div class="action-card" onclick="window.location.href='resultados.html'">
+                <div class="action-icon"><i class="fas fa-chart-simple"></i></div>
+                <h3>Ver Resultados</h3>
+                <p>Consulta tus análisis previos</p>
+            </div>
+        </div>
 
-    <!-- Main -->
-    <main class="main-content">
-      <div class="page-header">
-        <div>
-          <h1 class="page-title">Dashboard</h1>
-          <p class="page-subtitle" id="dash-welcome">Bienvenido de nuevo</p>
+        <div class="section-title">
+            <h3><i class="fas fa-history" style="color: #f59e0b;"></i> Historial de evaluaciones</h3>
+            <span style="font-size: 0.8rem; color: #64748b;" id="totalCount"></span>
         </div>
-        <a href="formulario.html" class="btn btn-primary">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 4v16m-8-8h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          Nueva evaluación
-        </a>
-      </div>
 
-      <!-- Stats -->
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon solar">☀️</div>
-          <div class="stat-info">
-            <span class="stat-value" id="stat-total">0</span>
-            <span class="stat-label">Evaluaciones</span>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon green">✅</div>
-          <div class="stat-info">
-            <span class="stat-value" id="stat-rec">0</span>
-            <span class="stat-label">Recomendadas</span>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon orange">⚡</div>
-          <div class="stat-info">
-            <span class="stat-value" id="stat-kwh">—</span>
-            <span class="stat-label">Último consumo</span>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon blue">💰</div>
-          <div class="stat-info">
-            <span class="stat-value" id="stat-saving">—</span>
-            <span class="stat-label">Ahorro estimado</span>
-          </div>
-        </div>
-      </div>
+        <div id="evaluationsGrid" class="evaluations-grid"></div>
 
-      <!-- Historial -->
-      <div class="section-card">
-        <div class="section-header">
-          <h2>Historial de evaluaciones</h2>
+        <div class="tips-section">
+            <h4><i class="fas fa-lightbulb"></i> Consejos para optimizar tu instalación solar</h4>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                <span style="background: white; padding: 0.3rem 0.8rem; border-radius: 20px;">🏠 Orienta paneles al sur</span>
+                <span style="background: white; padding: 0.3rem 0.8rem; border-radius: 20px;">📐 Inclinación óptima: 30-35°</span>
+                <span style="background: white; padding: 0.3rem 0.8rem; border-radius: 20px;">🌳 Evita sombras</span>
+                <span style="background: white; padding: 0.3rem 0.8rem; border-radius: 20px;">🧹 Limpieza periódica</span>
+            </div>
         </div>
-        <div id="history-list">
-          <div class="empty-state">
-            <div class="empty-icon">🌤️</div>
-            <p>Aún no tienes evaluaciones.<br/>¡Comienza tu primera evaluación solar!</p>
-            <a href="formulario.html" class="btn btn-primary" style="margin-top:1rem">Evaluar ahora</a>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
+    </div>
 
-  <script src="script.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const user = JSON.parse(localStorage.getItem('sa_current_user') || 'null');
-      if (!user) { window.location.href = 'index.html'; return; }
-      document.getElementById('sidebar-user').textContent = user.name || user.email;
-      document.getElementById('dash-welcome').textContent = `Hola, ${user.name || 'Usuario'} 👋`;
-      loadDashboardStats();
-    });
+    <script>
+        function mostrarFecha() {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('es-ES', options);
+        }
 
-    function loadDashboardStats() {
-      const history = JSON.parse(localStorage.getItem('sa_evaluations') || '[]');
-      document.getElementById('stat-total').textContent = history.length;
-      const rec = history.filter(e => e.result !== 'No recomendable').length;
-      document.getElementById('stat-rec').textContent = rec;
-      if (history.length > 0) {
-        const last = history[history.length - 1];
-        document.getElementById('stat-kwh').textContent = last.consumo + ' kWh';
-        document.getElementById('stat-saving').textContent = last.ahorro ? '$' + last.ahorro.toLocaleString() : '—';
-      }
+        function getTipoLugarClass(tipo) {
+            switch(tipo) {
+                case 'residencial': return 'type-residencial';
+                case 'comercial': return 'type-comercial';
+                case 'industrial': return 'type-industrial';
+                default: return '';
+            }
+        }
 
-      const list = document.getElementById('history-list');
-      if (history.length === 0) return;
-      list.innerHTML = history.slice().reverse().map((e, i) => `
-        <div class="history-item">
-          <div class="history-icon">${e.exposicion === 'alta' ? '☀️' : e.exposicion === 'media' ? '⛅' : '☁️'}</div>
-          <div class="history-info">
-            <span class="history-name">${e.nombre}</span>
-            <span class="history-meta">${e.lugar || 'Hogar'} · ${e.consumo} kWh · ${e.exposicion}</span>
-          </div>
-          <div class="history-badge badge-${e.result === 'Altamente recomendable' ? 'green' : e.result === 'Moderadamente recomendable' ? 'yellow' : 'red'}">
-            ${e.result}
-          </div>
-        </div>
-      `).join('');
-    }
-  </script>
+        function getTipoLugarIcon(tipo) {
+            switch(tipo) {
+                case 'residencial': return '🏠';
+                case 'comercial': return '🏢';
+                case 'industrial': return '🏭';
+                default: return '📍';
+            }
+        }
+
+        function getTipoLugarTexto(tipo) {
+            switch(tipo) {
+                case 'residencial': return 'Residencial';
+                case 'comercial': return 'Comercial';
+                case 'industrial': return 'Industrial';
+                default: return tipo;
+            }
+        }
+
+        // Calcular paneles estimados
+        function calcularPaneles(area, consumo) {
+            const panelesPorArea = Math.floor(area / 1.6);
+            const panelesPorConsumo = Math.floor(consumo / 150);
+            return Math.max(panelesPorArea, panelesPorConsumo, 4);
+        }
+
+        // Calcular producción mensual (kWh)
+        function calcularProduccion(paneles) {
+            return paneles * 45; // ~45 kWh por panel al mes
+        }
+
+        // Calcular porcentaje de cobertura
+        function calcularCobertura(produccion, consumo) {
+            return Math.min(100, Math.floor((produccion / consumo) * 100));
+        }
+
+        // Calcular inversión estimada
+        function calcularInversion(paneles) {
+            return paneles * 18000; // $18,000 MXN por panel aprox
+        }
+
+        // Calcular ahorro anual
+        function calcularAhorro(produccion) {
+            return produccion * 12 * 2.5; // 2.5 pesos por kWh aprox
+        }
+
+        // Determinar recomendación
+        function getRecomendacion(paneles, consumo, produccion) {
+            const cobertura = (produccion / consumo) * 100;
+            if (cobertura >= 80) return { texto: 'Altamente recomendable', clase: 'recomendacion-alta', nivel: 'alta' };
+            if (cobertura >= 50) return { texto: 'Recomendable', clase: 'recomendacion-media', nivel: 'media' };
+            return { texto: 'No recomendable', clase: 'recomendacion-baja', nivel: 'baja' };
+        }
+
+        function cargarEvaluaciones() {
+            const evaluaciones = JSON.parse(localStorage.getItem('evaluaciones') || '[]');
+            const grid = document.getElementById('evaluationsGrid');
+            const userName = localStorage.getItem('userName') || 'Carlos Gómez';
+            
+            document.getElementById('userName').textContent = userName.split(' ')[0];
+            document.getElementById('welcomeName').textContent = userName.split(' ')[0];
+            document.getElementById('totalEvaluaciones').textContent = evaluaciones.length;
+            document.getElementById('totalCount').textContent = `${evaluaciones.length} evaluación(es) totales`;
+
+            if (evaluaciones.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-solar-panel"></i>
+                        <p>Aún no tienes evaluaciones realizadas</p>
+                        <button style="margin-top: 1rem; background: #f59e0b; color: white; border: none; padding: 0.5rem 1.5rem; border-radius: 40px; cursor: pointer;" onclick="window.location.href='formulario.html'">
+                            Crear mi primera evaluación
+                        </button>
+                    </div>
+                `;
+                document.getElementById('totalPaneles').textContent = '0';
+                return;
+            }
+
+            let totalPanelesGlobal = 0;
+            
+            // Mostrar TODAS las evaluaciones (no solo las últimas)
+            const evaluacionesOrdenadas = [...evaluaciones].reverse();
+            
+            grid.innerHTML = evaluacionesOrdenadas.map(evalItem => {
+                const area = parseFloat(evalItem.area);
+                const consumo = parseFloat(evalItem.consumo);
+                const ubicacion = evalItem.ubicacion || 'No especificada';
+                const tipoLugar = evalItem.tipoLugar || 'residencial';
+                const fecha = evalItem.fecha || 'Fecha no registrada';
+                
+                const paneles = calcularPaneles(area, consumo);
+                const produccion = calcularProduccion(paneles);
+                const cobertura = calcularCobertura(produccion, consumo);
+                const inversion = calcularInversion(paneles);
+                const ahorro = calcularAhorro(produccion);
+                const recomendacion = getRecomendacion(paneles, consumo, produccion);
+                
+                totalPanelesGlobal += paneles;
+                
+                return `
+                    <div class="eval-card">
+                        <div class="eval-header">
+                            <span class="eval-id"><i class="fas fa-hashtag"></i> ${evalItem.id}</span>
+                            <span class="eval-date"><i class="far fa-calendar-alt"></i> ${fecha}</span>
+                        </div>
+                        <span class="eval-type ${getTipoLugarClass(tipoLugar)}">
+                            ${getTipoLugarIcon(tipoLugar)} ${getTipoLugarTexto(tipoLugar)}
+                        </span>
+                        
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label"><i class="fas fa-map-marker-alt"></i> UBICACIÓN</span>
+                                <span class="info-value">${ubicacion}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label"><i class="fas fa-ruler-combined"></i> ÁREA DISPONIBLE</span>
+                                <span class="info-value">${area} m²</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label"><i class="fas fa-bolt"></i> CONSUMO MENSUAL</span>
+                                <span class="info-value">${consumo} kWh</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label"><i class="fas fa-solar-panel"></i> PANELES ESTIMADOS</span>
+                                <span class="info-value info-value-large">${paneles} paneles</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label"><i class="fas fa-charging-station"></i> PRODUCCIÓN ESTIMADA</span>
+                                <span class="info-value">${produccion} kWh/mes</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label"><i class="fas fa-percent"></i> COBERTURA</span>
+                                <span class="info-value">${cobertura}%</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label"><i class="fas fa-money-bill-wave"></i> INVERSIÓN ESTIMADA</span>
+                                <span class="info-value">$${inversion.toLocaleString()} MXN</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label"><i class="fas fa-piggy-bank"></i> AHORRO ANUAL</span>
+                                <span class="info-value">$${ahorro.toLocaleString()} MXN</span>
+                            </div>
+                        </div>
+                        
+                        <div class="recomendacion ${recomendacion.clase}">
+                            <i class="fas ${recomendacion.nivel === 'alta' ? 'fa-check-circle' : (recomendacion.nivel === 'media' ? 'fa-chart-line' : 'fa-exclamation-triangle')}"></i>
+                            ${recomendacion.texto}
+                        </div>
+                        
+                        <div class="eval-actions">
+                            <button class="btn-sm btn-view" onclick="verResultados('${evalItem.id}')">
+                                <i class="fas fa-eye"></i> Ver detalles
+                            </button>
+                            <button class="btn-sm btn-delete" onclick="eliminarEvaluacion('${evalItem.id}')">
+                                <i class="fas fa-trash-alt"></i> Eliminar
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('totalPaneles').textContent = totalPanelesGlobal;
+        }
+        
+        function verResultados(id) {
+            const evaluaciones = JSON.parse(localStorage.getItem('evaluaciones') || '[]');
+            const evaluacion = evaluaciones.find(e => e.id === id);
+            if (evaluacion) {
+                localStorage.setItem('ultimaEvaluacion', JSON.stringify(evaluacion));
+                window.location.href = 'resultados.html';
+            }
+        }
+        
+        function eliminarEvaluacion(id) {
+            if (confirm('¿Eliminar esta evaluación? Esta acción no se puede deshacer.')) {
+                let evaluaciones = JSON.parse(localStorage.getItem('evaluaciones') || '[]');
+                evaluaciones = evaluaciones.filter(e => e.id !== id);
+                localStorage.setItem('evaluaciones', JSON.stringify(evaluaciones));
+                cargarEvaluaciones();
+            }
+        }
+        
+        mostrarFecha();
+        cargarEvaluaciones();
+    </script>
 </body>
 </html>

@@ -1,1 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Formulario</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
 
+    <div class="container">
+        <h1>Formulario</h1>
+
+        <input type="text" id="nombre" placeholder="Nombre">
+        <input type="number" id="edad" placeholder="Edad">
+
+        <p>¿Cómo te sientes hoy?</p>
+
+        <select id="estado">
+            <option value="">Selecciona</option>
+            <option value="bien">Bien</option>
+            <option value="regular">Regular</option>
+            <option value="mal">Mal</option>
+        </select>
+
+        <button onclick="enviar()">Enviar</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

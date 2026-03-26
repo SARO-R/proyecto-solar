@@ -2,244 +2,219 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Solar Advisor — Nueva Evaluación</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Solar Advisor — Evaluación</title>
   <link rel="stylesheet" href="styles.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 </head>
-<body>
-  <div class="bg-mesh"></div>
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
+<body class="page-app">
 
-  <div class="app-shell">
-
-    <!-- SIDEBAR -->
-    <aside class="sidebar" id="sidebar">
+  <div class="app-layout">
+    <aside class="sidebar">
       <div class="sidebar-brand">
-        <div class="sb-logo">
-          <div class="sb-logo-icon">☀</div>
-          <span class="sb-logo-text">Solar<em>Advisor</em></span>
+        <div class="brand-icon sm">
+          <svg width="22" height="22" viewBox="0 0 36 36" fill="none">
+            <circle cx="18" cy="18" r="8" fill="#FFB800"/>
+            <line x1="18" y1="2" x2="18" y2="6" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="18" y1="30" x2="18" y2="34" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="2" y1="18" x2="6" y2="18" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="30" y1="18" x2="34" y2="18" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="6.34" y1="6.34" x2="9.17" y2="9.17" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="26.83" y1="26.83" x2="29.66" y2="29.66" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="29.66" y1="6.34" x2="26.83" y2="9.17" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="9.17" y1="26.83" x2="6.34" y2="29.66" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
         </div>
-        <p class="sb-tagline">Optimiza tu energía solar</p>
+        <span>Solar Advisor</span>
       </div>
+
       <nav class="sidebar-nav">
-        <span class="nav-section-label">Principal</span>
-        <a class="nav-item" href="dashboard.html"><span class="nav-icon">▦</span> Dashboard</a>
-        <a class="nav-item active" href="formulario.html"><span class="nav-icon">＋</span> Nueva evaluación</a>
-        <span class="nav-section-label">Historial</span>
-        <a class="nav-item" href="dashboard.html"><span class="nav-icon">☰</span> Mis evaluaciones</a>
-        <span class="nav-section-label">Cuenta</span>
-        <a class="nav-item" href="index.html" onclick="logout(); return false;"><span class="nav-icon">⇐</span> Cerrar sesión</a>
+        <a href="Dashboard.html" class="nav-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/></svg>
+          Dashboard
+        </a>
+        <a href="formulario.html" class="nav-item active">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Nueva evaluación
+        </a>
+        <a href="resultados.html" class="nav-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Resultados
+        </a>
       </nav>
-      <div class="sidebar-user">
-        <div class="user-avatar" id="sbAvatar">?</div>
-        <div>
-          <div class="user-info-name"  id="sbUserName">—</div>
-          <div class="user-info-email" id="sbUserEmail">—</div>
-        </div>
-        <button class="btn-logout-sm" onclick="logout()" title="Salir">✕</button>
+
+      <div class="sidebar-footer">
+        <div class="user-chip" id="sidebar-user"></div>
+        <button class="btn-logout" onclick="handleLogout()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Salir
+        </button>
       </div>
     </aside>
 
-    <!-- MAIN -->
-    <div class="main-area">
-      <div class="topbar">
-        <span class="topbar-title">Evaluación Solar</span>
-        <div class="topbar-right">
-          <span class="eval-id-badge" id="evalIdBadge">ID se generará al calcular</span>
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Evaluación solar</h1>
+          <p class="page-subtitle">Ingresa tus datos para obtener una recomendación personalizada</p>
         </div>
       </div>
 
-      <div class="page-content">
+      <div class="form-card">
+        <div id="form-error" class="alert alert-error" style="display:none"></div>
 
-        <!-- Progress -->
-        <div class="progress-track">
-          <div class="step done"><div class="step-dot">✓</div><span>Acceso</span></div>
-          <div class="step-line done"></div>
-          <div class="step active"><div class="step-dot">2</div><span>Evaluación</span></div>
+        <!-- Pasos -->
+        <div class="steps-indicator">
+          <div class="step active" id="step-dot-1"><span>1</span><label>Datos</label></div>
           <div class="step-line"></div>
-          <div class="step"><div class="step-dot">3</div><span>Resultados</span></div>
+          <div class="step" id="step-dot-2"><span>2</span><label>Energía</label></div>
+          <div class="step-line"></div>
+          <div class="step" id="step-dot-3"><span>3</span><label>Solar</label></div>
         </div>
 
-        <h2 class="section-title">Nueva evaluación</h2>
-        <p class="section-sub">Completa los datos para analizar la viabilidad de paneles solares en tu propiedad</p>
-
-        <div class="eval-grid">
-
-          <!-- CARD 01 — Lugar HU-03 / RF-03 -->
-          <div class="eval-card">
-            <div class="eval-card-head">
-              <span class="eval-num">01</span>
-              <div><h3>Datos del lugar</h3><p>HU-03 · RF-03 — Crear evaluación</p></div>
-              <span class="eval-head-icon">📍</span>
+        <!-- Step 1 -->
+        <div id="step-1" class="step-content">
+          <h3 class="step-title">Información del lugar</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Nombre del usuario</label>
+              <input type="text" id="f-nombre" placeholder="Tu nombre completo"/>
             </div>
-            <div class="field">
-              <label for="nombreUsuario">Nombre del evaluador</label>
-              <div class="input-wrap"><span class="i-icon">👤</span>
-                <input type="text" id="nombreUsuario" placeholder="Nombre completo"/>
-              </div>
-              <span class="field-error" id="errNombre"></span>
+            <div class="form-group">
+              <label>Tipo de lugar</label>
+              <select id="f-lugar">
+                <option value="">Selecciona...</option>
+                <option value="Casa">🏠 Casa</option>
+                <option value="Apartamento">🏢 Apartamento</option>
+                <option value="Finca">🌿 Finca</option>
+                <option value="Local comercial">🏪 Local comercial</option>
+              </select>
             </div>
-            <div class="field">
-              <label for="tipoLugar">Tipo de lugar</label>
-              <div class="input-wrap select-wrap"><span class="i-icon">🏠</span>
-                <select id="tipoLugar">
-                  <option value="">— Selecciona —</option>
-                  <option value="residencial">Residencial</option>
-                  <option value="comercial">Comercial</option>
-                  <option value="industrial">Industrial</option>
-                </select>
-              </div>
-              <span class="field-error" id="errTipo"></span>
+            <div class="form-group">
+              <label>Municipio / Ciudad</label>
+              <input type="text" id="f-ciudad" placeholder="Ej: Bogotá"/>
             </div>
-            <div class="field">
-              <label for="ubicacion">Ubicación / Dirección</label>
-              <div class="input-wrap"><span class="i-icon">🗺</span>
-                <input type="text" id="ubicacion" placeholder="Ej: Calle 85 #15-30, Bogotá"/>
-              </div>
-              <span class="field-error" id="errUbicacion"></span>
+            <div class="form-group">
+              <label>ID de evaluación</label>
+              <input type="text" id="f-id" readonly class="input-readonly"/>
             </div>
           </div>
-
-          <!-- CARD 02 — Área HU-04 / RF-04 -->
-          <div class="eval-card">
-            <div class="eval-card-head">
-              <span class="eval-num">02</span>
-              <div><h3>Área del techo</h3><p>HU-04 · RF-04 — Registrar área</p></div>
-              <span class="eval-head-icon">📐</span>
-            </div>
-            <div class="area-mode">
-              <label class="radio-label">
-                <input type="radio" name="areaMode" value="dimensiones" checked onchange="toggleAreaMode(this.value)"/>
-                <span>Largo y ancho</span>
-              </label>
-              <label class="radio-label">
-                <input type="radio" name="areaMode" value="total" onchange="toggleAreaMode(this.value)"/>
-                <span>Área total</span>
-              </label>
-            </div>
-            <div id="modeDimensiones">
-              <div class="field-row">
-                <div class="field">
-                  <label for="largo">Largo (m)</label>
-                  <div class="input-wrap"><span class="i-icon">↔</span>
-                    <input type="number" id="largo" placeholder="0" min="0.1" step="0.1" oninput="calcularArea()"/>
-                  </div>
-                </div>
-                <div class="field">
-                  <label for="ancho">Ancho (m)</label>
-                  <div class="input-wrap"><span class="i-icon">↕</span>
-                    <input type="number" id="ancho" placeholder="0" min="0.1" step="0.1" oninput="calcularArea()"/>
-                  </div>
-                </div>
-              </div>
-              <div class="area-preview">Área calculada: <strong id="areaResult">— m²</strong></div>
-            </div>
-            <div id="modeTotal" class="hidden">
-              <div class="field">
-                <label for="areaTotalDirecta">Área total (m²)</label>
-                <div class="input-wrap"><span class="i-icon">▭</span>
-                  <input type="number" id="areaTotalDirecta" placeholder="Ej: 30" min="0.1" step="0.1"/>
-                </div>
-              </div>
-            </div>
-            <span class="field-error" id="errArea"></span>
+          <div class="step-actions">
+            <button class="btn btn-primary" onclick="goStep(2)">Siguiente →</button>
           </div>
-
-          <!-- CARD 03 — Consumo HU-05 / RF-05 -->
-          <div class="eval-card">
-            <div class="eval-card-head">
-              <span class="eval-num">03</span>
-              <div><h3>Energía y exposición</h3><p>HU-05 · RF-05 — Consumo eléctrico</p></div>
-              <span class="eval-head-icon">⚡</span>
-            </div>
-            <div class="field">
-              <label for="consumoKwh">Consumo mensual (kWh)</label>
-              <div class="input-wrap"><span class="i-icon">🔋</span>
-                <input type="number" id="consumoKwh" placeholder="Ej: 300" min="1" step="1"/>
-              </div>
-              <span class="hint">Revisa tu factura de energía</span>
-              <span class="field-error" id="errConsumo"></span>
-            </div>
-            <div class="field">
-              <label for="tarifaKwh">Tarifa por kWh (COP)</label>
-              <div class="input-wrap"><span class="i-icon">💰</span>
-                <input type="number" id="tarifaKwh" placeholder="Ej: 600" min="1" step="1"/>
-              </div>
-              <span class="field-error" id="errTarifa"></span>
-            </div>
-            <div class="field">
-              <label>Nivel de exposición solar</label>
-              <div class="exposure-grid">
-                <label class="exposure-opt">
-                  <input type="radio" name="exposicion" value="alta"/>
-                  <div class="exp-card"><span class="exp-icon">🌞</span><strong>Alta</strong><small>>5h/día</small></div>
-                </label>
-                <label class="exposure-opt">
-                  <input type="radio" name="exposicion" value="media"/>
-                  <div class="exp-card"><span class="exp-icon">⛅</span><strong>Media</strong><small>3–5h/día</small></div>
-                </label>
-                <label class="exposure-opt">
-                  <input type="radio" name="exposicion" value="baja"/>
-                  <div class="exp-card"><span class="exp-icon">🌥</span><strong>Baja</strong><small><3h/día</small></div>
-                </label>
-              </div>
-              <span class="field-error" id="errExposicion"></span>
-            </div>
-          </div>
-
-          <!-- CARD 04 — Panel RF-07/08 -->
-          <div class="eval-card">
-            <div class="eval-card-head">
-              <span class="eval-num">04</span>
-              <div><h3>Parámetros del panel</h3><p>RF-07 · RF-08 — Cálculo producción</p></div>
-              <span class="eval-head-icon">🔆</span>
-            </div>
-            <div class="field-row">
-              <div class="field">
-                <label for="potenciaPanel">Potencia (W)</label>
-                <div class="input-wrap"><span class="i-icon">⚡</span>
-                  <input type="number" id="potenciaPanel" value="400" min="50" step="10"/>
-                </div>
-              </div>
-              <div class="field">
-                <label for="areaPanel">Área panel (m²)</label>
-                <div class="input-wrap"><span class="i-icon">▭</span>
-                  <input type="number" id="areaPanel" value="2" min="0.5" step="0.1"/>
-                </div>
-              </div>
-            </div>
-            <div class="field-row">
-              <div class="field">
-                <label for="precioPanel">Precio panel (COP)</label>
-                <div class="input-wrap"><span class="i-icon">💵</span>
-                  <input type="number" id="precioPanel" value="800000" min="100000" step="50000"/>
-                </div>
-              </div>
-              <div class="field">
-                <label for="costosAdicionales">Costos adicionales</label>
-                <div class="input-wrap"><span class="i-icon">🔧</span>
-                  <input type="number" id="costosAdicionales" value="500000" min="0" step="50000"/>
-                </div>
-              </div>
-            </div>
-            <span class="hint">Valores de referencia precargados. Puedes ajustarlos.</span>
-          </div>
-
-        </div><!-- /eval-grid -->
-
-        <div class="form-actions">
-          <button class="btn-secondary" onclick="limpiarFormulario()">↺ Limpiar</button>
-          <button class="btn-primary btn-md" onclick="procesarEvaluacion()">
-            <span>Calcular y ver resultados</span><span class="btn-arrow">→</span>
-          </button>
         </div>
 
+        <!-- Step 2 -->
+        <div id="step-2" class="step-content" style="display:none">
+          <h3 class="step-title">Consumo energético</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Consumo mensual (kWh)</label>
+              <input type="number" id="f-consumo" placeholder="Ej: 350" min="1"/>
+            </div>
+            <div class="form-group">
+              <label>Tarifa eléctrica ($/kWh)</label>
+              <input type="number" id="f-tarifa" placeholder="Ej: 650" min="1"/>
+            </div>
+            <div class="form-group span-2">
+              <label>Área disponible del techo (m²)</label>
+              <input type="number" id="f-area" placeholder="Ej: 40" min="1"/>
+            </div>
+          </div>
+          <div class="step-actions">
+            <button class="btn btn-ghost" onclick="goStep(1)">← Atrás</button>
+            <button class="btn btn-primary" onclick="goStep(3)">Siguiente →</button>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div id="step-3" class="step-content" style="display:none">
+          <h3 class="step-title">Exposición solar</h3>
+          <p class="step-desc">¿Cuántas horas de sol directo recibe el techo de tu propiedad al día?</p>
+
+          <div class="exposure-cards">
+            <div class="exposure-card" id="exp-alta" onclick="selectExposure('alta')">
+              <div class="exposure-icon">☀️</div>
+              <div class="exposure-label">Alta</div>
+              <div class="exposure-desc">+5 horas de sol directo</div>
+            </div>
+            <div class="exposure-card" id="exp-media" onclick="selectExposure('media')">
+              <div class="exposure-icon">⛅</div>
+              <div class="exposure-label">Media</div>
+              <div class="exposure-desc">3 a 5 horas de sol</div>
+            </div>
+            <div class="exposure-card" id="exp-baja" onclick="selectExposure('baja')">
+              <div class="exposure-icon">☁️</div>
+              <div class="exposure-label">Baja</div>
+              <div class="exposure-desc">Menos de 3 horas</div>
+            </div>
+          </div>
+
+          <input type="hidden" id="f-exposicion"/>
+
+          <div class="step-actions">
+            <button class="btn btn-ghost" onclick="goStep(2)">← Atrás</button>
+            <button class="btn btn-primary btn-glow" onclick="handleEvaluation()">
+              ⚡ Analizar ahora
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
+    </main>
   </div>
 
   <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = JSON.parse(localStorage.getItem('sa_current_user') || 'null');
+      if (!user) { window.location.href = 'index.html'; return; }
+      document.getElementById('sidebar-user').textContent = user.name || user.email;
+      document.getElementById('f-id').value = 'SA-' + Date.now().toString(36).toUpperCase();
+    });
+
+    let currentStep = 1;
+
+    function goStep(n) {
+      const errEl = document.getElementById('form-error');
+      errEl.style.display = 'none';
+
+      if (n > currentStep) {
+        if (currentStep === 1) {
+          if (!document.getElementById('f-nombre').value.trim()) return showErr('Ingresa tu nombre.');
+          if (!document.getElementById('f-lugar').value) return showErr('Selecciona el tipo de lugar.');
+          if (!document.getElementById('f-ciudad').value.trim()) return showErr('Ingresa tu ciudad.');
+        }
+        if (currentStep === 2) {
+          const c = parseFloat(document.getElementById('f-consumo').value);
+          const t = parseFloat(document.getElementById('f-tarifa').value);
+          const a = parseFloat(document.getElementById('f-area').value);
+          if (!c || c <= 0) return showErr('Ingresa un consumo válido.');
+          if (!t || t <= 0) return showErr('Ingresa una tarifa válida.');
+          if (!a || a <= 0) return showErr('Ingresa un área válida.');
+        }
+      }
+
+      document.getElementById('step-' + currentStep).style.display = 'none';
+      document.getElementById('step-dot-' + currentStep).classList.remove('active');
+      document.getElementById('step-dot-' + currentStep).classList.add('done');
+      currentStep = n;
+      document.getElementById('step-' + currentStep).style.display = 'block';
+      document.getElementById('step-dot-' + currentStep).classList.add('active');
+    }
+
+    function showErr(msg) {
+      const el = document.getElementById('form-error');
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
+
+    let selectedExposure = '';
+    function selectExposure(val) {
+      selectedExposure = val;
+      document.getElementById('f-exposicion').value = val;
+      ['alta','media','baja'].forEach(e => document.getElementById('exp-'+e).classList.remove('selected'));
+      document.getElementById('exp-'+val).classList.add('selected');
+    }
+  </script>
 </body>
 </html>

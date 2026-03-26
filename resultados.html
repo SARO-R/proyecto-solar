@@ -2,169 +2,148 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Solar Advisor — Resultado del análisis</title>
   <link rel="stylesheet" href="styles.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 </head>
-<body class="results-page">
-
+<body>
   <div class="bg-mesh"></div>
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
 
-  <!-- NAVBAR -->
-  <nav class="topnav">
-    <div class="nav-brand">
-      <span class="brand-icon-sm">⚡</span>
-      <span class="nav-title">Solar<em>Advisor</em></span>
-    </div>
-    <div class="nav-user">
-      <span class="user-badge" id="navUserName">Usuario</span>
-      <button class="btn-logout" onclick="logout()">Salir →</button>
-    </div>
-  </nav>
+  <div class="app-shell">
 
-  <main class="results-container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="sb-logo">
+          <div class="sb-logo-icon">☀</div>
+          <span class="sb-logo-text">Solar<em>Advisor</em></span>
+        </div>
+        <p class="sb-tagline">Optimiza tu energía solar</p>
+      </div>
+      <nav class="sidebar-nav">
+        <span class="nav-section-label">Principal</span>
+        <a class="nav-item" href="dashboard.html"><span class="nav-icon">▦</span> Dashboard</a>
+        <a class="nav-item" href="formulario.html"><span class="nav-icon">＋</span> Nueva evaluación</a>
+        <span class="nav-section-label">Historial</span>
+        <a class="nav-item" href="dashboard.html"><span class="nav-icon">☰</span> Mis evaluaciones</a>
+        <span class="nav-section-label">Cuenta</span>
+        <a class="nav-item" href="index.html" onclick="logout(); return false;"><span class="nav-icon">⇐</span> Cerrar sesión</a>
+      </nav>
+      <div class="sidebar-user">
+        <div class="user-avatar" id="sbAvatar">?</div>
+        <div>
+          <div class="user-info-name"  id="sbUserName">—</div>
+          <div class="user-info-email" id="sbUserEmail">—</div>
+        </div>
+        <button class="btn-logout-sm" onclick="logout()" title="Salir">✕</button>
+      </div>
+    </aside>
 
-    <!-- PROGRESS STEPS -->
-    <div class="progress-track">
-      <div class="step done"><div class="step-dot">✓</div><span>Acceso</span></div>
-      <div class="step-line done"></div>
-      <div class="step done"><div class="step-dot">✓</div><span>Evaluación</span></div>
-      <div class="step-line done"></div>
-      <div class="step active"><div class="step-dot">3</div><span>Resultados</span></div>
-    </div>
-
-    <div class="results-header">
-      <h2 class="section-title">Resultado del análisis</h2>
-      <p class="section-sub" id="resHeaderSub">Análisis completado para tu propiedad</p>
-    </div>
-
-    <!-- VERDICT BANNER (RF-13 / HU-06) -->
-    <div class="verdict-banner" id="verdictBanner">
-      <div class="verdict-glow"></div>
-      <div class="verdict-content">
-        <div class="verdict-icon" id="verdictIcon">☀</div>
-        <div class="verdict-text">
-          <p class="verdict-label">Recomendación</p>
-          <h3 class="verdict-title" id="verdictTitle">—</h3>
-          <p class="verdict-msg" id="verdictMsg">—</p>
+    <!-- MAIN -->
+    <div class="main-area">
+      <div class="topbar">
+        <span class="topbar-title">Resultado del análisis</span>
+        <div class="topbar-right">
+          <span class="eval-id-badge" id="topEvalId">—</span>
         </div>
       </div>
-      <div class="verdict-badge" id="verdictBadge">—</div>
+
+      <div class="page-content">
+
+        <!-- Progress -->
+        <div class="progress-track">
+          <div class="step done"><div class="step-dot">✓</div><span>Acceso</span></div>
+          <div class="step-line done"></div>
+          <div class="step done"><div class="step-dot">✓</div><span>Evaluación</span></div>
+          <div class="step-line done"></div>
+          <div class="step active"><div class="step-dot">3</div><span>Resultados</span></div>
+        </div>
+
+        <!-- Verdict RF-13 -->
+        <div class="verdict-banner" id="verdictBanner">
+          <div class="verdict-glow"></div>
+          <div class="verdict-content">
+            <div class="verdict-icon" id="verdictIcon">☀</div>
+            <div>
+              <p class="verdict-label">Recomendación · RF-13</p>
+              <h3 class="verdict-title" id="verdictTitle">—</h3>
+              <p class="verdict-msg"   id="verdictMsg">—</p>
+            </div>
+          </div>
+          <div class="verdict-badge" id="verdictBadge">—</div>
+        </div>
+
+        <!-- Metrics RF-09 a RF-12 -->
+        <div class="res-grid">
+          <div class="res-tile">
+            <div class="res-tile-head"><span class="res-tile-icon">📊</span><span class="res-tile-label">Cobertura energética</span><span class="res-tile-rf">RF-09</span></div>
+            <div class="res-tile-val" id="mCobertura">—</div>
+            <div class="bar-track"><div class="bar-fill" id="barCobertura" style="width:0%"></div></div>
+            <div class="res-tile-sub" id="mBalance">—</div>
+          </div>
+          <div class="res-tile">
+            <div class="res-tile-head"><span class="res-tile-icon">🔆</span><span class="res-tile-label">Paneles instalables</span><span class="res-tile-rf">RF-07</span></div>
+            <div class="res-tile-val" id="mPaneles">—</div>
+            <div class="res-tile-sub" id="mProduccion">—</div>
+          </div>
+          <div class="res-tile">
+            <div class="res-tile-head"><span class="res-tile-icon">💰</span><span class="res-tile-label">Inversión total</span><span class="res-tile-rf">RF-10</span></div>
+            <div class="res-tile-val" id="mInversion">—</div>
+            <div class="res-tile-sub" id="mInvSub">—</div>
+          </div>
+          <div class="res-tile">
+            <div class="res-tile-head"><span class="res-tile-icon">💸</span><span class="res-tile-label">Ahorro mensual</span><span class="res-tile-rf">RF-11</span></div>
+            <div class="res-tile-val" id="mAhorro">—</div>
+            <div class="res-tile-sub">Estimado en factura</div>
+          </div>
+          <div class="res-tile">
+            <div class="res-tile-head"><span class="res-tile-icon">📅</span><span class="res-tile-label">Tiempo de recuperación</span><span class="res-tile-rf">RF-12</span></div>
+            <div class="res-tile-val" id="mPayback">—</div>
+            <div class="res-tile-sub" id="mPaybackSub">—</div>
+          </div>
+          <div class="res-tile">
+            <div class="res-tile-head"><span class="res-tile-icon">🔋</span><span class="res-tile-label">Consumo vs Producción</span><span class="res-tile-rf">RF-08</span></div>
+            <div class="res-tile-val" id="mConsumoVsProd">—</div>
+            <div class="res-tile-sub" id="mConsumoSub">—</div>
+          </div>
+        </div>
+
+        <!-- Chart RF-15 -->
+        <div class="chart-card">
+          <div class="chart-card-head">
+            <h3>Consumo vs Producción mensual (12 meses)</h3>
+            <span class="res-tile-rf">RF-15</span>
+          </div>
+          <div class="chart-bars" id="chartBars"></div>
+          <div class="chart-legend">
+            <span class="leg-item"><span class="leg-dot" style="background:var(--orange)"></span>Consumo</span>
+            <span class="leg-item"><span class="leg-dot" style="background:var(--yellow)"></span>Producción</span>
+          </div>
+        </div>
+
+        <!-- Report RF-14 -->
+        <div class="report-card">
+          <div class="report-head">
+            <h3>Reporte completo · RF-14</h3>
+            <button class="btn-print" onclick="window.print()">🖨 Imprimir</button>
+          </div>
+          <table class="report-table">
+            <thead><tr><th>Parámetro</th><th>Valor</th><th>Ref.</th></tr></thead>
+            <tbody id="reportBody"></tbody>
+          </table>
+        </div>
+
+        <div class="res-actions">
+          <button class="btn-secondary" onclick="window.location.href='formulario.html'">← Nueva evaluación</button>
+          <button class="btn-primary btn-md" onclick="window.location.href='dashboard.html'">Ver dashboard →</button>
+        </div>
+
+      </div>
     </div>
-
-    <!-- METRICS GRID (RF-09 / RF-10 / RF-11 / RF-12) -->
-    <div class="metrics-grid">
-
-      <div class="metric-card" id="mc-cobertura">
-        <div class="metric-header">
-          <span class="metric-icon">📊</span>
-          <span class="metric-label">Cobertura energética</span>
-          <span class="metric-rf">RF-09</span>
-        </div>
-        <div class="metric-value" id="mCobertura">—</div>
-        <div class="metric-bar-track">
-          <div class="metric-bar-fill" id="barCobertura" style="width:0%"></div>
-        </div>
-        <div class="metric-sub" id="mBalance">—</div>
-      </div>
-
-      <div class="metric-card" id="mc-paneles">
-        <div class="metric-header">
-          <span class="metric-icon">🔆</span>
-          <span class="metric-label">Paneles instalables</span>
-          <span class="metric-rf">RF-07</span>
-        </div>
-        <div class="metric-value" id="mPaneles">—</div>
-        <div class="metric-sub" id="mProduccion">—</div>
-      </div>
-
-      <div class="metric-card" id="mc-inversion">
-        <div class="metric-header">
-          <span class="metric-icon">💰</span>
-          <span class="metric-label">Inversión total</span>
-          <span class="metric-rf">RF-10</span>
-        </div>
-        <div class="metric-value" id="mInversion">—</div>
-        <div class="metric-sub" id="mInvSub">Incluyendo instalación</div>
-      </div>
-
-      <div class="metric-card" id="mc-ahorro">
-        <div class="metric-header">
-          <span class="metric-icon">💸</span>
-          <span class="metric-label">Ahorro mensual</span>
-          <span class="metric-rf">RF-11</span>
-        </div>
-        <div class="metric-value" id="mAhorro">—</div>
-        <div class="metric-sub">Estimado en tu factura</div>
-      </div>
-
-      <div class="metric-card" id="mc-payback">
-        <div class="metric-header">
-          <span class="metric-icon">📅</span>
-          <span class="metric-label">Tiempo de recuperación</span>
-          <span class="metric-rf">RF-12</span>
-        </div>
-        <div class="metric-value" id="mPayback">—</div>
-        <div class="metric-sub" id="mPaybackSub">—</div>
-      </div>
-
-      <div class="metric-card" id="mc-consumo">
-        <div class="metric-header">
-          <span class="metric-icon">🔋</span>
-          <span class="metric-label">Consumo vs Producción</span>
-          <span class="metric-rf">RF-08</span>
-        </div>
-        <div class="metric-value" id="mConsumoVsProd">—</div>
-        <div class="metric-sub" id="mConsumoSub">—</div>
-      </div>
-
-    </div>
-
-    <!-- CHART: Consumo vs Producción (RF-15) -->
-    <div class="chart-card">
-      <div class="chart-header">
-        <h3>Consumo vs Producción mensual</h3>
-        <span class="metric-rf">RF-15</span>
-      </div>
-      <div class="chart-area" id="chartArea">
-        <div class="chart-bars" id="chartBars"></div>
-        <div class="chart-legend">
-          <span class="legend-item"><span class="leg-dot" style="background:var(--orange)"></span>Consumo</span>
-          <span class="legend-item"><span class="leg-dot" style="background:var(--yellow)"></span>Producción</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- FULL REPORT TABLE (RF-14) -->
-    <div class="report-card">
-      <div class="report-header">
-        <h3>Reporte completo</h3>
-        <span class="metric-rf">RF-14</span>
-        <button class="btn-print" onclick="window.print()">🖨 Imprimir</button>
-      </div>
-      <table class="report-table" id="reportTable">
-        <thead>
-          <tr>
-            <th>Parámetro</th>
-            <th>Valor</th>
-            <th>Referencia</th>
-          </tr>
-        </thead>
-        <tbody id="reportBody">
-          <!-- filled by JS -->
-        </tbody>
-      </table>
-    </div>
-
-    <div class="results-actions">
-      <button class="btn-secondary" onclick="window.location.href='formulario.html'">← Nueva evaluación</button>
-      <button class="btn-primary" onclick="logout()">Volver al inicio →</button>
-    </div>
-
-  </main>
+  </div>
 
   <script src="script.js"></script>
 </body>

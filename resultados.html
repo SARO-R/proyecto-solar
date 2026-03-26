@@ -2,149 +2,186 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Solar Advisor — Resultado del análisis</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Solar Advisor — Resultados</title>
   <link rel="stylesheet" href="styles.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 </head>
-<body>
-  <div class="bg-mesh"></div>
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
+<body class="page-app">
 
-  <div class="app-shell">
-
-    <!-- SIDEBAR -->
-    <aside class="sidebar" id="sidebar">
+  <div class="app-layout">
+    <aside class="sidebar">
       <div class="sidebar-brand">
-        <div class="sb-logo">
-          <div class="sb-logo-icon">☀</div>
-          <span class="sb-logo-text">Solar<em>Advisor</em></span>
+        <div class="brand-icon sm">
+          <svg width="22" height="22" viewBox="0 0 36 36" fill="none">
+            <circle cx="18" cy="18" r="8" fill="#FFB800"/>
+            <line x1="18" y1="2" x2="18" y2="6" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="18" y1="30" x2="18" y2="34" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="2" y1="18" x2="6" y2="18" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="30" y1="18" x2="34" y2="18" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="6.34" y1="6.34" x2="9.17" y2="9.17" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="26.83" y1="26.83" x2="29.66" y2="29.66" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="29.66" y1="6.34" x2="26.83" y2="9.17" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="9.17" y1="26.83" x2="6.34" y2="29.66" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
         </div>
-        <p class="sb-tagline">Optimiza tu energía solar</p>
+        <span>Solar Advisor</span>
       </div>
       <nav class="sidebar-nav">
-        <span class="nav-section-label">Principal</span>
-        <a class="nav-item" href="dashboard.html"><span class="nav-icon">▦</span> Dashboard</a>
-        <a class="nav-item" href="formulario.html"><span class="nav-icon">＋</span> Nueva evaluación</a>
-        <span class="nav-section-label">Historial</span>
-        <a class="nav-item" href="dashboard.html"><span class="nav-icon">☰</span> Mis evaluaciones</a>
-        <span class="nav-section-label">Cuenta</span>
-        <a class="nav-item" href="index.html" onclick="logout(); return false;"><span class="nav-icon">⇐</span> Cerrar sesión</a>
+        <a href="Dashboard.html" class="nav-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/></svg>
+          Dashboard
+        </a>
+        <a href="formulario.html" class="nav-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Nueva evaluación
+        </a>
+        <a href="resultados.html" class="nav-item active">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Resultados
+        </a>
       </nav>
-      <div class="sidebar-user">
-        <div class="user-avatar" id="sbAvatar">?</div>
-        <div>
-          <div class="user-info-name"  id="sbUserName">—</div>
-          <div class="user-info-email" id="sbUserEmail">—</div>
-        </div>
-        <button class="btn-logout-sm" onclick="logout()" title="Salir">✕</button>
+      <div class="sidebar-footer">
+        <div class="user-chip" id="sidebar-user"></div>
+        <button class="btn-logout" onclick="handleLogout()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Salir
+        </button>
       </div>
     </aside>
 
-    <!-- MAIN -->
-    <div class="main-area">
-      <div class="topbar">
-        <span class="topbar-title">Resultado del análisis</span>
-        <div class="topbar-right">
-          <span class="eval-id-badge" id="topEvalId">—</span>
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Resultado del análisis</h1>
+          <p class="page-subtitle" id="res-id-label">Evaluación solar</p>
+        </div>
+        <button class="btn btn-ghost" onclick="window.print()">🖨️ Imprimir</button>
+      </div>
+
+      <!-- Resultado principal -->
+      <div id="result-hero" class="result-hero">
+        <div class="result-emoji" id="res-emoji">☀️</div>
+        <div class="result-text">
+          <h2 id="res-title">—</h2>
+          <p id="res-desc">—</p>
         </div>
       </div>
 
-      <div class="page-content">
-
-        <!-- Progress -->
-        <div class="progress-track">
-          <div class="step done"><div class="step-dot">✓</div><span>Acceso</span></div>
-          <div class="step-line done"></div>
-          <div class="step done"><div class="step-dot">✓</div><span>Evaluación</span></div>
-          <div class="step-line done"></div>
-          <div class="step active"><div class="step-dot">3</div><span>Resultados</span></div>
+      <!-- Métricas -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <span class="metric-label">Paneles recomendados</span>
+          <span class="metric-value" id="res-paneles">—</span>
         </div>
-
-        <!-- Verdict RF-13 -->
-        <div class="verdict-banner" id="verdictBanner">
-          <div class="verdict-glow"></div>
-          <div class="verdict-content">
-            <div class="verdict-icon" id="verdictIcon">☀</div>
-            <div>
-              <p class="verdict-label">Recomendación · RF-13</p>
-              <h3 class="verdict-title" id="verdictTitle">—</h3>
-              <p class="verdict-msg"   id="verdictMsg">—</p>
-            </div>
-          </div>
-          <div class="verdict-badge" id="verdictBadge">—</div>
+        <div class="metric-card">
+          <span class="metric-label">Producción mensual</span>
+          <span class="metric-value" id="res-produccion">—</span>
         </div>
-
-        <!-- Metrics RF-09 a RF-12 -->
-        <div class="res-grid">
-          <div class="res-tile">
-            <div class="res-tile-head"><span class="res-tile-icon">📊</span><span class="res-tile-label">Cobertura energética</span><span class="res-tile-rf">RF-09</span></div>
-            <div class="res-tile-val" id="mCobertura">—</div>
-            <div class="bar-track"><div class="bar-fill" id="barCobertura" style="width:0%"></div></div>
-            <div class="res-tile-sub" id="mBalance">—</div>
-          </div>
-          <div class="res-tile">
-            <div class="res-tile-head"><span class="res-tile-icon">🔆</span><span class="res-tile-label">Paneles instalables</span><span class="res-tile-rf">RF-07</span></div>
-            <div class="res-tile-val" id="mPaneles">—</div>
-            <div class="res-tile-sub" id="mProduccion">—</div>
-          </div>
-          <div class="res-tile">
-            <div class="res-tile-head"><span class="res-tile-icon">💰</span><span class="res-tile-label">Inversión total</span><span class="res-tile-rf">RF-10</span></div>
-            <div class="res-tile-val" id="mInversion">—</div>
-            <div class="res-tile-sub" id="mInvSub">—</div>
-          </div>
-          <div class="res-tile">
-            <div class="res-tile-head"><span class="res-tile-icon">💸</span><span class="res-tile-label">Ahorro mensual</span><span class="res-tile-rf">RF-11</span></div>
-            <div class="res-tile-val" id="mAhorro">—</div>
-            <div class="res-tile-sub">Estimado en factura</div>
-          </div>
-          <div class="res-tile">
-            <div class="res-tile-head"><span class="res-tile-icon">📅</span><span class="res-tile-label">Tiempo de recuperación</span><span class="res-tile-rf">RF-12</span></div>
-            <div class="res-tile-val" id="mPayback">—</div>
-            <div class="res-tile-sub" id="mPaybackSub">—</div>
-          </div>
-          <div class="res-tile">
-            <div class="res-tile-head"><span class="res-tile-icon">🔋</span><span class="res-tile-label">Consumo vs Producción</span><span class="res-tile-rf">RF-08</span></div>
-            <div class="res-tile-val" id="mConsumoVsProd">—</div>
-            <div class="res-tile-sub" id="mConsumoSub">—</div>
-          </div>
+        <div class="metric-card">
+          <span class="metric-label">Cobertura del consumo</span>
+          <span class="metric-value" id="res-cobertura">—</span>
         </div>
-
-        <!-- Chart RF-15 -->
-        <div class="chart-card">
-          <div class="chart-card-head">
-            <h3>Consumo vs Producción mensual (12 meses)</h3>
-            <span class="res-tile-rf">RF-15</span>
-          </div>
-          <div class="chart-bars" id="chartBars"></div>
-          <div class="chart-legend">
-            <span class="leg-item"><span class="leg-dot" style="background:var(--orange)"></span>Consumo</span>
-            <span class="leg-item"><span class="leg-dot" style="background:var(--yellow)"></span>Producción</span>
-          </div>
+        <div class="metric-card">
+          <span class="metric-label">Ahorro mensual</span>
+          <span class="metric-value" id="res-ahorro">—</span>
         </div>
-
-        <!-- Report RF-14 -->
-        <div class="report-card">
-          <div class="report-head">
-            <h3>Reporte completo · RF-14</h3>
-            <button class="btn-print" onclick="window.print()">🖨 Imprimir</button>
-          </div>
-          <table class="report-table">
-            <thead><tr><th>Parámetro</th><th>Valor</th><th>Ref.</th></tr></thead>
-            <tbody id="reportBody"></tbody>
-          </table>
+        <div class="metric-card">
+          <span class="metric-label">Inversión estimada</span>
+          <span class="metric-value" id="res-inversion">—</span>
         </div>
-
-        <div class="res-actions">
-          <button class="btn-secondary" onclick="window.location.href='formulario.html'">← Nueva evaluación</button>
-          <button class="btn-primary btn-md" onclick="window.location.href='dashboard.html'">Ver dashboard →</button>
+        <div class="metric-card">
+          <span class="metric-label">Retorno de inversión</span>
+          <span class="metric-value" id="res-payback">—</span>
         </div>
-
       </div>
-    </div>
+
+      <!-- Barra de cobertura -->
+      <div class="section-card">
+        <h3>Cobertura energética</h3>
+        <div class="coverage-bar-wrap">
+          <div class="coverage-bar">
+            <div class="coverage-fill" id="coverage-fill" style="width:0%"></div>
+          </div>
+          <span id="coverage-pct">0%</span>
+        </div>
+      </div>
+
+      <!-- Tabla resumen -->
+      <div class="section-card">
+        <h3>Resumen de la evaluación</h3>
+        <table class="report-table" id="report-table">
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="result-actions">
+        <a href="formulario.html" class="btn btn-primary">Nueva evaluación</a>
+        <a href="Dashboard.html" class="btn btn-ghost">Ver historial</a>
+      </div>
+    </main>
   </div>
 
   <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = JSON.parse(localStorage.getItem('sa_current_user') || 'null');
+      if (!user) { window.location.href = 'index.html'; return; }
+      document.getElementById('sidebar-user').textContent = user.name || user.email;
+
+      const data = JSON.parse(localStorage.getItem('sa_last_result') || 'null');
+      if (!data) {
+        document.getElementById('res-title').textContent = 'Sin datos';
+        document.getElementById('res-desc').textContent = 'Realiza una evaluación primero.';
+        return;
+      }
+      renderResults(data);
+    });
+
+    function renderResults(d) {
+      document.getElementById('res-id-label').textContent = 'ID: ' + (d.id || '—') + ' · ' + (d.lugar || '') + ' · ' + (d.ciudad || '');
+
+      const isAlta = d.result === 'Altamente recomendable';
+      const isMedia = d.result === 'Moderadamente recomendable';
+
+      document.getElementById('res-emoji').textContent = isAlta ? '☀️' : isMedia ? '⛅' : '☁️';
+      document.getElementById('res-title').textContent = d.result;
+      document.getElementById('res-desc').textContent = isAlta
+        ? 'Tu propiedad tiene condiciones ideales para aprovechar la energía solar.'
+        : isMedia
+        ? 'Hay potencial solar moderado. Puedes beneficiarte con un buen sistema.'
+        : 'Las condiciones actuales no favorecen una inversión solar rentable.';
+
+      const hero = document.getElementById('result-hero');
+      hero.className = 'result-hero ' + (isAlta ? 'hero-green' : isMedia ? 'hero-yellow' : 'hero-red');
+
+      document.getElementById('res-paneles').textContent = (d.paneles || 0) + ' paneles';
+      document.getElementById('res-produccion').textContent = (d.produccion || 0).toFixed(0) + ' kWh/mes';
+      document.getElementById('res-cobertura').textContent = (d.cobertura || 0).toFixed(1) + '%';
+      document.getElementById('res-ahorro').textContent = '$' + (d.ahorro || 0).toLocaleString() + '/mes';
+      document.getElementById('res-inversion').textContent = '$' + (d.inversion || 0).toLocaleString();
+      document.getElementById('res-payback').textContent = (d.payback || 0).toFixed(1) + ' años';
+
+      // Barra
+      setTimeout(() => {
+        const pct = Math.min(d.cobertura || 0, 100);
+        document.getElementById('coverage-fill').style.width = pct + '%';
+        document.getElementById('coverage-pct').textContent = pct.toFixed(1) + '%';
+      }, 300);
+
+      // Tabla
+      const rows = [
+        ['Nombre', d.nombre], ['Tipo de lugar', d.lugar], ['Ciudad', d.ciudad],
+        ['Consumo mensual', d.consumo + ' kWh'], ['Exposición solar', d.exposicion],
+        ['Tarifa eléctrica', '$' + d.tarifa + '/kWh'], ['Área del techo', d.area + ' m²'],
+        ['Paneles instalados', d.paneles], ['Producción mensual', d.produccion?.toFixed(0) + ' kWh'],
+        ['Ahorro mensual', '$' + d.ahorro?.toLocaleString()], ['Inversión total', '$' + d.inversion?.toLocaleString()],
+        ['Payback', d.payback?.toFixed(1) + ' años'], ['Resultado', d.result],
+      ];
+      document.querySelector('#report-table tbody').innerHTML = rows.map(([k,v]) =>
+        `<tr><td class="table-key">${k}</td><td class="table-val">${v || '—'}</td></tr>`
+      ).join('');
+    }
+  </script>
 </body>
 </html>

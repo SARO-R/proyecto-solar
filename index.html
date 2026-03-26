@@ -1,101 +1,100 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Solar Advisor — Acceso</title>
-  <link rel="stylesheet" href="styles.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Solar Advisor — Inicio</title>
+  <link rel="stylesheet" href="styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 </head>
-<body class="auth-page">
-  <div class="bg-mesh"></div>
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
+<body class="page-login">
 
-  <main class="auth-container">
-    <div class="auth-card">
+  <!-- Fondo animado -->
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
 
-      <div class="brand">
-        <span class="brand-icon">☀</span>
-        <h1 class="brand-title">Solar<em>Advisor</em></h1>
-        <p class="brand-sub">Bienvenido a Solar Advisor · Optimiza tu uso de energía solar</p>
+  <div class="login-wrapper">
+
+    <!-- Logo / Brand -->
+    <div class="brand">
+      <div class="brand-icon">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <circle cx="18" cy="18" r="8" fill="#FFB800"/>
+          <line x1="18" y1="2" x2="18" y2="6" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="18" y1="30" x2="18" y2="34" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="2" y1="18" x2="6" y2="18" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="30" y1="18" x2="34" y2="18" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="6.34" y1="6.34" x2="9.17" y2="9.17" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="26.83" y1="26.83" x2="29.66" y2="29.66" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="29.66" y1="6.34" x2="26.83" y2="9.17" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="9.17" y1="26.83" x2="6.34" y2="29.66" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
       </div>
-
-      <div class="tab-switcher">
-        <button class="tab-btn active" id="tabLogin"    onclick="switchTab('login')">Ingresar</button>
-        <button class="tab-btn"        id="tabRegister" onclick="switchTab('register')">Registrarse</button>
-        <div class="tab-indicator" id="tabIndicator"></div>
-      </div>
-
-      <!-- LOGIN HU-02 / RF-02 -->
-      <form id="loginForm" class="auth-form" novalidate>
-        <div class="field">
-          <label for="loginEmail">Correo electrónico</label>
-          <div class="input-wrap">
-            <span class="i-icon">✉</span>
-            <input type="email" id="loginEmail" placeholder="usuario@correo.com" autocomplete="off"/>
-          </div>
-          <span class="field-error" id="errLoginEmail"></span>
-        </div>
-        <div class="field">
-          <label for="loginPass">Contraseña</label>
-          <div class="input-wrap">
-            <span class="i-icon">🔒</span>
-            <input type="password" id="loginPass" placeholder="Tu contraseña"/>
-            <button type="button" class="toggle-pass" onclick="togglePass('loginPass',this)">👁</button>
-          </div>
-          <span class="field-error" id="errLoginPass"></span>
-        </div>
-        <span class="field-error global-error" id="errLoginGlobal"></span>
-        <button type="button" class="btn-primary" onclick="handleLogin()">
-          <span>Ingresar al sistema</span><span class="btn-arrow">→</span>
-        </button>
-      </form>
-
-      <!-- REGISTER HU-01 / RF-01 -->
-      <form id="registerForm" class="auth-form hidden" novalidate>
-        <div class="field">
-          <label for="regName">Nombre completo</label>
-          <div class="input-wrap">
-            <span class="i-icon">👤</span>
-            <input type="text" id="regName" placeholder="Ej: Juan Pérez"/>
-          </div>
-          <span class="field-error" id="errRegName"></span>
-        </div>
-        <div class="field">
-          <label for="regEmail">Correo electrónico</label>
-          <div class="input-wrap">
-            <span class="i-icon">✉</span>
-            <input type="email" id="regEmail" placeholder="usuario@correo.com"/>
-          </div>
-          <span class="field-error" id="errRegEmail"></span>
-        </div>
-        <div class="field">
-          <label for="regPhone">Teléfono</label>
-          <div class="input-wrap">
-            <span class="i-icon">📱</span>
-            <input type="tel" id="regPhone" placeholder="Ej: 3001234567"/>
-          </div>
-          <span class="field-error" id="errRegPhone"></span>
-        </div>
-        <div class="field">
-          <label for="regPass">Contraseña</label>
-          <div class="input-wrap">
-            <span class="i-icon">🔒</span>
-            <input type="password" id="regPass" placeholder="Mínimo 6 caracteres"/>
-            <button type="button" class="toggle-pass" onclick="togglePass('regPass',this)">👁</button>
-          </div>
-          <span class="field-error" id="errRegPass"></span>
-        </div>
-        <span class="field-error global-error" id="errRegGlobal"></span>
-        <button type="button" class="btn-primary" onclick="handleRegister()">
-          <span>Crear cuenta</span><span class="btn-arrow">→</span>
-        </button>
-      </form>
-
+      <span class="brand-name">Solar Advisor</span>
     </div>
-    <p class="auth-footer">Solar Advisor · Universidad Manuela Beltrán · 2025</p>
-  </main>
+
+    <!-- Card principal -->
+    <div class="card login-card">
+      <div class="card-header">
+        <h1>Bienvenido de nuevo</h1>
+        <p>Optimiza tu uso de energía solar</p>
+      </div>
+
+      <div id="login-error" class="alert alert-error" style="display:none"></div>
+      <div id="login-success" class="alert alert-success" style="display:none"></div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('login')">Iniciar sesión</button>
+        <button class="tab" onclick="switchTab('register')">Registrarse</button>
+      </div>
+
+      <!-- Login Form -->
+      <div id="tab-login">
+        <div class="form-group">
+          <label>Correo electrónico</label>
+          <input type="email" id="login-email" placeholder="tu@correo.com" />
+        </div>
+        <div class="form-group">
+          <label>Contraseña</label>
+          <input type="password" id="login-password" placeholder="••••••••" />
+        </div>
+        <button class="btn btn-primary btn-full" onclick="handleLogin()">
+          <span>Ingresar</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+
+      <!-- Register Form -->
+      <div id="tab-register" style="display:none">
+        <div class="form-group">
+          <label>Nombre completo</label>
+          <input type="text" id="reg-name" placeholder="Juan Pérez" />
+        </div>
+        <div class="form-group">
+          <label>Correo electrónico</label>
+          <input type="email" id="reg-email" placeholder="tu@correo.com" />
+        </div>
+        <div class="form-group">
+          <label>Teléfono</label>
+          <input type="tel" id="reg-phone" placeholder="+57 300 000 0000" />
+        </div>
+        <div class="form-group">
+          <label>Contraseña</label>
+          <input type="password" id="reg-password" placeholder="Mínimo 6 caracteres" />
+        </div>
+        <button class="btn btn-primary btn-full" onclick="handleRegister()">
+          <span>Crear cuenta</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <p class="login-footer">Solar Advisor · Tecnología verde para un futuro sostenible</p>
+  </div>
 
   <script src="script.js"></script>
 </body>

@@ -124,6 +124,11 @@
       loadDashboardStats();
     });
 
+    function verDetalle(evalData) {
+      localStorage.setItem('sa_last_result', JSON.stringify(evalData));
+      window.location.href = 'resultados.html';
+    }
+
     function loadDashboardStats() {
       const history = JSON.parse(localStorage.getItem('sa_evaluations') || '[]');
       document.getElementById('stat-total').textContent = history.length;
@@ -137,8 +142,8 @@
 
       const list = document.getElementById('history-list');
       if (history.length === 0) return;
-      list.innerHTML = history.slice().reverse().map((e, i) => `
-        <div class="history-item">
+      list.innerHTML = history.slice().reverse().map((e) => `
+        <div class="history-item" style="cursor:pointer" onclick='verDetalle(${JSON.stringify(e)})'>
           <div class="history-icon">${e.exposicion === 'alta' ? '☀️' : e.exposicion === 'media' ? '⛅' : '☁️'}</div>
           <div class="history-info">
             <span class="history-name">${e.nombre}</span>
